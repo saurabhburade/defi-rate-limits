@@ -97,7 +97,7 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
  */
 export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   if (chainId === chains.anvil.id) {
-    return `/blockexplorer/transaction/${txnHash}`;
+    return "";
   }
 
   const chainNames = Object.keys(chains);
@@ -127,7 +127,7 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   if (network.id === chains.anvil.id) {
-    return `/blockexplorer/address/${address}`;
+    return "";
   }
 
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;

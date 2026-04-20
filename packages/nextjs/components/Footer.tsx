@@ -12,12 +12,12 @@ export const Footer = () => {
 
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <a
-            href="https://github.com/scaffold-eth/scaffold-eth-2"
+            href="https://x.com/saurabh_evm"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center rounded-xl border border-default bg-[color:var(--surface-muted)] px-3 py-2 text-xs text-muted-foreground transition hover:text-foreground"
           >
-            Scaffold-ETH 2
+            @saurabh_evm
           </a>
         </div>
       </div>
