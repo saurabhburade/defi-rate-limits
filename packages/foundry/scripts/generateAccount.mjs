@@ -1,11 +1,13 @@
-import { ethers } from "ethers";
+import { Wallet } from "ethers";
 import { parse, stringify } from "envfile";
 import * as fs from "fs";
 import password from "@inquirer/password";
+import path from "path";
+import { PACKAGE_DIR } from "./common.mjs";
 
-const envFilePath = "./.env";
+const envFilePath = path.join(PACKAGE_DIR, ".env");
 
-const getValidatedPassword = async () => {
+async function getValidatedPassword() {
   while (true) {
     const pass = await password({ message: "Enter a password to encrypt your private key:" });
     const confirmation = await password({ message: "Confirm password:" });
@@ -13,13 +15,13 @@ const getValidatedPassword = async () => {
     if (pass === confirmation) {
       return pass;
     }
-    console.log("❌ Passwords don't match. Please try again.");
+    console.log("Passwords don't match. Please try again.");
   }
-};
+}
 
-const setNewEnvConfig = async (existingEnvConfig = {}) => {
-  console.log("👛 Generating new Wallet\n");
-  const randomWallet = ethers.Wallet.createRandom();
+async function setNewEnvConfig(existingEnvConfig = {}) {
+  console.log("Generating new wallet\n");
+  const randomWallet = Wallet.createRandom();
 
   const pass = await getValidatedPassword();
   const encryptedJson = await randomWallet.encrypt(pass);
@@ -29,23 +31,21 @@ const setNewEnvConfig = async (existingEnvConfig = {}) => {
     DEPLOYER_PRIVATE_KEY_ENCRYPTED: encryptedJson,
   };
 
-  // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
-  console.log("\n📄 Encrypted Private Key saved to packages/hardhat/.env file");
-  console.log("🪄 Generated wallet address:", randomWallet.address, "\n");
-  console.log("⚠️ Make sure to remember your password! You'll need it to decrypt the private key.");
-};
+  console.log("\nEncrypted private key saved to packages/foundry/.env");
+  console.log("Generated wallet address:", randomWallet.address, "\n");
+  console.log("Remember your password. You'll need it to decrypt the private key.");
+}
 
 async function main() {
   if (!fs.existsSync(envFilePath)) {
-    // No .env file yet.
     await setNewEnvConfig();
     return;
   }
 
   const existingEnvConfig = parse(fs.readFileSync(envFilePath).toString());
   if (existingEnvConfig.DEPLOYER_PRIVATE_KEY_ENCRYPTED) {
-    console.log("⚠️ You already have a deployer account. Check the packages/hardhat/.env file");
+    console.log("You already have a deployer account. Check the packages/foundry/.env file");
     return;
   }
 

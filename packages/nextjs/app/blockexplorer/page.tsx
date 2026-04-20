@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { PaginationButton, SearchBar, TransactionsTable } from "./_components";
 import type { NextPage } from "next";
-import { hardhat } from "viem/chains";
+import { anvil } from "viem/chains";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
@@ -15,15 +15,11 @@ const BlockExplorer: NextPage = () => {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    if (targetNetwork.id !== hardhat.id) {
-      setIsLocalNetwork(false);
-    }
+    setIsLocalNetwork(targetNetwork.id === anvil.id);
   }, [targetNetwork.id]);
 
   useEffect(() => {
-    if (targetNetwork.id === hardhat.id && error) {
-      setHasError(true);
-    }
+    setHasError(targetNetwork.id === anvil.id && Boolean(error));
   }, [targetNetwork.id, error]);
 
   useEffect(() => {
@@ -31,11 +27,11 @@ const BlockExplorer: NextPage = () => {
       notification.error(
         <>
           <p className="font-bold mt-0 mb-1">
-            <code className="italic bg-base-300 text-base font-bold"> targetNetwork </code> is not localhost
+            <code className="italic bg-base-300 text-base font-bold"> targetNetwork </code> is not local Anvil
           </p>
           <p className="m-0">
             - You are on <code className="italic bg-base-300 text-base font-bold">{targetNetwork.name}</code> .This
-            block explorer is only for <code className="italic bg-base-300 text-base font-bold">localhost</code>.
+            block explorer is only for <code className="italic bg-base-300 text-base font-bold">local Anvil</code>.
           </p>
           <p className="mt-1 break-normal">
             - You can use{" "}

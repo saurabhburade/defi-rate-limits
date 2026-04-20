@@ -1,0 +1,540 @@
+{
+  "address": "0x300f56c1eded92112f8666ba9ee13a3fabc169b3",
+  "abi": [
+    {
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "_limit",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "fallback",
+      "stateMutability": "payable"
+    },
+    {
+      "type": "receive",
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "borrow",
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "bucketSize",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "currentBucketId",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "limit",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "numBuckets",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "previewBorrow",
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "allowed",
+          "type": "bool",
+          "internalType": "bool"
+        },
+        {
+          "name": "usedBefore",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "remainingAfter",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "recentBuckets",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "bucketIndices",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "amounts",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "remainingCapacity",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "windowDuration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "pure"
+    },
+    {
+      "type": "function",
+      "name": "windowUsage",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "BorrowExecuted",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "bucketIndex",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "windowUsageAfter",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "EtherNotAccepted",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidAmount",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidConfig",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "RateLimited",
+      "inputs": [
+        {
+          "name": "requested",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "available",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    }
+  ],
+  "args": [
+    "1000000"
+  ],
+  "bytecode": "0x60a060405234801561000f575f5ffd5b5060405161078338038061078383398101604081905261002e91610056565b805f0361004e576040516306b7c75960e31b815260040160405180910390fd5b60805261006d565b5f60208284031215610066575f5ffd5b5051919050565b6080516106e961009a5f395f818161018a015281816102410152818161037601526103e501526106e95ff3fe608060405260043610610094575f3560e01c8063a4d66daf11610058578063a4d66daf14610179578063a78c7b08146101ac578063b1e3ded2146101c0578063bfdcc9a2146101d4578063c5ebeaec146101e8576100b2565b806317cd732c146100cb5780635c11ff7a146100f3578063765205151461010757806378007e231461011b5780637eb8dfcb14610157576100b2565b366100b257604051630dccd20d60e21b815260040160405180910390fd5b604051630dccd20d60e21b815260040160405180910390fd5b3480156100d6575f5ffd5b506100e061025881565b6040519081526020015b60405180910390f35b3480156100fe575f5ffd5b506100e0610209565b348015610112575f5ffd5b506100e061021c565b348015610126575f5ffd5b5061013a610135366004610578565b61022d565b6040805193151584526020840192909252908201526060016100ea565b348015610162575f5ffd5b5061016b61029e565b6040516100ea9291906105c9565b348015610184575f5ffd5b506100e07f000000000000000000000000000000000000000000000000000000000000000081565b3480156101b7575f5ffd5b506100e0610367565b3480156101cb575f5ffd5b506100e061039a565b3480156101df575f5ffd5b506100e0600681565b3480156101f3575f5ffd5b50610207610202366004610578565b6103a7565b005b5f610217600661025861060a565b905090565b5f61021761022861039a565b6104d0565b5f5f5f61023861021c565b91505f610265837f0000000000000000000000000000000000000000000000000000000000000000610627565b905084158061027357508085115b15610282575f93509050610297565b60018361028f8784610627565b935093509350505b9193909250565b6060805f6102aa61039a565b90505f6102b682610512565b60408051600680825260e082019092529192506020820160c080368337505060408051600680825260e0820190925292965090506020820160c0803683370190505092505f5b6006811015610360575f610310828461063a565b9050808683815181106103255761032561064d565b60200260200101818152505061033a81610540565b85838151811061034c5761034c61064d565b6020908102919091010152506001016102fc565b5050509091565b5f61037061021c565b610217907f0000000000000000000000000000000000000000000000000000000000000000610627565b5f61021761025842610675565b805f036103c75760405163162908e360e11b815260040160405180910390fd5b5f6103d061039a565b90505f6103dc826104d0565b90505f610409827f0000000000000000000000000000000000000000000000000000000000000000610627565b90508084111561043a576040516340df7ba960e01b8152600481018590526024810182905260440160405180910390fd5b5f610446600685610688565b5f8181526020819052604090208054919250908514610469578481555f60018201555b85816001015f82825461047c919061063a565b90915550859050337f4ce8bc76710fb10d8ad5e4e00ba4bd9c77797eb06729b163e41cc513fbac0cb0886104b0818961063a565b6040805192835260208301919091520160405180910390a3505050505050565b5f5f6104db83610512565b9050805b83811161050b576104ef81610540565b6104f9908461063a565b92506105048161069b565b90506104df565b5050919050565b5f8061052060016006610627565b905080831161052f575f610539565b6105398184610627565b9392505050565b5f80808061054f600686610688565b81526020019081526020015f20905082815f01541461056e575f610539565b6001015492915050565b5f60208284031215610588575f5ffd5b5035919050565b5f8151808452602084019350602083015f5b828110156105bf5781518652602095860195909101906001016105a1565b5093949350505050565b604081525f6105db604083018561058f565b82810360208401526105ed818561058f565b95945050505050565b634e487b7160e01b5f52601160045260245ffd5b8082028115828204841417610621576106216105f6565b92915050565b81810381811115610621576106216105f6565b80820180821115610621576106216105f6565b634e487b7160e01b5f52603260045260245ffd5b634e487b7160e01b5f52601260045260245ffd5b5f8261068357610683610661565b500490565b5f8261069657610696610661565b500690565b5f600182016106ac576106ac6105f6565b506001019056fea2646970667358221220e232f22937b61258b04e74a470e9dc67973a2ad3586bf61415a334139593a5be64736f6c634300081e0033",
+  "contractName": "BucketedRateLimiter",
+  "deployedBytecode": "0x608060405260043610610094575f3560e01c8063a4d66daf11610058578063a4d66daf14610179578063a78c7b08146101ac578063b1e3ded2146101c0578063bfdcc9a2146101d4578063c5ebeaec146101e8576100b2565b806317cd732c146100cb5780635c11ff7a146100f3578063765205151461010757806378007e231461011b5780637eb8dfcb14610157576100b2565b366100b257604051630dccd20d60e21b815260040160405180910390fd5b604051630dccd20d60e21b815260040160405180910390fd5b3480156100d6575f5ffd5b506100e061025881565b6040519081526020015b60405180910390f35b3480156100fe575f5ffd5b506100e0610209565b348015610112575f5ffd5b506100e061021c565b348015610126575f5ffd5b5061013a610135366004610578565b61022d565b6040805193151584526020840192909252908201526060016100ea565b348015610162575f5ffd5b5061016b61029e565b6040516100ea9291906105c9565b348015610184575f5ffd5b506100e07f000000000000000000000000000000000000000000000000000000000000000081565b3480156101b7575f5ffd5b506100e0610367565b3480156101cb575f5ffd5b506100e061039a565b3480156101df575f5ffd5b506100e0600681565b3480156101f3575f5ffd5b50610207610202366004610578565b6103a7565b005b5f610217600661025861060a565b905090565b5f61021761022861039a565b6104d0565b5f5f5f61023861021c565b91505f610265837f0000000000000000000000000000000000000000000000000000000000000000610627565b905084158061027357508085115b15610282575f93509050610297565b60018361028f8784610627565b935093509350505b9193909250565b6060805f6102aa61039a565b90505f6102b682610512565b60408051600680825260e082019092529192506020820160c080368337505060408051600680825260e0820190925292965090506020820160c0803683370190505092505f5b6006811015610360575f610310828461063a565b9050808683815181106103255761032561064d565b60200260200101818152505061033a81610540565b85838151811061034c5761034c61064d565b6020908102919091010152506001016102fc565b5050509091565b5f61037061021c565b610217907f0000000000000000000000000000000000000000000000000000000000000000610627565b5f61021761025842610675565b805f036103c75760405163162908e360e11b815260040160405180910390fd5b5f6103d061039a565b90505f6103dc826104d0565b90505f610409827f0000000000000000000000000000000000000000000000000000000000000000610627565b90508084111561043a576040516340df7ba960e01b8152600481018590526024810182905260440160405180910390fd5b5f610446600685610688565b5f8181526020819052604090208054919250908514610469578481555f60018201555b85816001015f82825461047c919061063a565b90915550859050337f4ce8bc76710fb10d8ad5e4e00ba4bd9c77797eb06729b163e41cc513fbac0cb0886104b0818961063a565b6040805192835260208301919091520160405180910390a3505050505050565b5f5f6104db83610512565b9050805b83811161050b576104ef81610540565b6104f9908461063a565b92506105048161069b565b90506104df565b5050919050565b5f8061052060016006610627565b905080831161052f575f610539565b6105398184610627565b9392505050565b5f80808061054f600686610688565b81526020019081526020015f20905082815f01541461056e575f610539565b6001015492915050565b5f60208284031215610588575f5ffd5b5035919050565b5f8151808452602084019350602083015f5b828110156105bf5781518652602095860195909101906001016105a1565b5093949350505050565b604081525f6105db604083018561058f565b82810360208401526105ed818561058f565b95945050505050565b634e487b7160e01b5f52601160045260245ffd5b8082028115828204841417610621576106216105f6565b92915050565b81810381811115610621576106216105f6565b80820180821115610621576106216105f6565b634e487b7160e01b5f52603260045260245ffd5b634e487b7160e01b5f52601260045260245ffd5b5f8261068357610683610661565b500490565b5f8261069657610696610661565b500690565b5f600182016106ac576106ac6105f6565b506001019056fea2646970667358221220e232f22937b61258b04e74a470e9dc67973a2ad3586bf61415a334139593a5be64736f6c634300081e0033",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.30+commit.73712a01"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_limit",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "EtherNotAccepted"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidAmount"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidConfig"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "requested",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "available",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "RateLimited"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "bucketIndex",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "windowUsageAfter",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "BorrowExecuted",
+          "anonymous": false
+        },
+        {
+          "inputs": [],
+          "stateMutability": "payable",
+          "type": "fallback"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "borrow"
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "bucketSize",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "currentBucketId",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "limit",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "numBuckets",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "previewBorrow",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "allowed",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256",
+              "name": "usedBefore",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "remainingAfter",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "recentBuckets",
+          "outputs": [
+            {
+              "internalType": "uint256[]",
+              "name": "bucketIndices",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "amounts",
+              "type": "uint256[]"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "remainingCapacity",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "windowDuration",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "windowUsage",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "payable",
+          "type": "receive"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "contracts/BucketedRateLimiter.sol": "BucketedRateLimiter"
+      },
+      "evmVersion": "prague",
+      "libraries": {}
+    },
+    "sources": {
+      "contracts/BucketedRateLimiter.sol": {
+        "keccak256": "0xd4577d9106a8b64aca5bbba49f2c64f79d39a5971c0246cd9958396f06810d5a",
+        "urls": [
+          "bzz-raw://4876505ce60a8a90eeee62ef7c3354319f26d7f8cc9b72ed3ee047059ff794f4",
+          "dweb:/ipfs/QmfLXwHbhzKKJz7rmN3Y3HqNnyqmQLFvDFit2LHz9LKnkr"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "receipt": {
+    "status": "0x1",
+    "cumulativeGasUsed": "0x2da6f0d",
+    "logs": [],
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "type": "0x2",
+    "transactionHash": "0x6bca10da2959016f18a3a7da8cbeea06eeac1fbf73ed92f1f770a072b80d613d",
+    "transactionIndex": "0x67",
+    "blockHash": "0x758344055e2916c542bbd1ebab7468a5e9e74368f72b73be6b5a841f6e5ecd1e",
+    "blockNumber": 10699439,
+    "gasUsed": "0x6a96a",
+    "effectiveGasPrice": "0x8fe7ed4",
+    "from": "0x2ac696ac83a5aece0cedcc26c2ee27793dcbc1f8",
+    "to": null,
+    "contractAddress": "0x300f56c1eded92112f8666ba9ee13a3fabc169b3"
+  },
+  "sourceName": "contracts/BucketedRateLimiter.sol",
+  "transactionHash": "0x6bca10da2959016f18a3a7da8cbeea06eeac1fbf73ed92f1f770a072b80d613d"
+}

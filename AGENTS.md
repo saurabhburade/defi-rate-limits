@@ -4,29 +4,18 @@ This file provides guidance to coding agents working in this repository.
 
 ## Project Overview
 
-Scaffold-ETH 2 (SE-2) is a starter kit for building dApps on Ethereum. It comes in **two flavors** based on the Solidity framework:
+Scaffold-ETH 2 (SE-2) is a starter kit for building dApps on Ethereum.
 
-- **Hardhat flavor**: Uses `packages/hardhat` with hardhat-deploy plugin
-- **Foundry flavor**: Uses `packages/foundry` with Forge scripts
+This repository uses the **Foundry flavor**:
 
-Both flavors share the same frontend package:
-
+- **packages/foundry**: Solidity contracts, Forge tests, Anvil local chain, and deployment scripts
 - **packages/nextjs**: React frontend (Next.js App Router, not Pages Router, RainbowKit, Wagmi, Viem, TypeScript, Tailwind CSS with DaisyUI)
-
-### Detecting Which Flavor You're Using
-
-Check which package exists in the repository:
-
-- If `packages/hardhat` exists → **Hardhat flavor** (follow Hardhat instructions)
-- If `packages/foundry` exists → **Foundry flavor** (follow Foundry instructions)
 
 ## Common Commands
 
-Commands work the same for both flavors unless noted otherwise:
-
 ```bash
 # Development workflow (run each in separate terminal)
-yarn chain          # Start local blockchain (Hardhat or Anvil)
+yarn chain          # Start local Anvil blockchain
 yarn deploy         # Deploy contracts to local network
 yarn start          # Start Next.js frontend at http://localhost:3000
 
@@ -38,16 +27,16 @@ yarn format         # Format both packages
 yarn next:build     # Build frontend
 yarn compile        # Compile Solidity contracts
 
-# Contract verification (works for both)
+# Contract verification
 yarn verify --network <network>
 
-# Account management (works for both)
+# Account management
 yarn generate            # Generate new deployer account
 yarn account:import      # Import existing private key
 yarn account             # View current account info
 
-# Deploy to live network
-yarn deploy --network <network>   # e.g., sepolia, mainnet, base
+# Deploy to configured testnet
+yarn deploy --network <network>   # e.g., baseSepolia, sepolia
 
 yarn vercel:yolo --prod # for deployment of frontend
 ```
@@ -56,31 +45,13 @@ yarn vercel:yolo --prod # for deployment of frontend
 
 ### Smart Contract Development
 
-#### Hardhat Flavor
-
-- Contracts: `packages/hardhat/contracts/`
-- Deployment scripts: `packages/hardhat/deploy/` (uses hardhat-deploy plugin)
-- Tests: `packages/hardhat/test/`
-- Config: `packages/hardhat/hardhat.config.ts`
-- Deploying specific contract:
-  - If the deploy script has:
-    ```typescript
-    // In packages/hardhat/deploy/01_deploy_my_contract.ts
-    deployMyContract.tags = ["MyContract"];
-    ```
-  - `yarn deploy --tags MyContract`
-
-#### Foundry Flavor
-
 - Contracts: `packages/foundry/contracts/`
-- Deployment scripts: `packages/foundry/script/` (uses custom deployment strategy)
-  - Example: `packages/foundry/script/Deploy.s.sol` and `packages/foundry/script/DeployYourContract.s.sol`
+- Deployment scripts: `packages/foundry/script/`
+  - Example: `packages/foundry/script/Deploy.s.sol`
 - Tests: `packages/foundry/test/`
 - Config: `packages/foundry/foundry.toml`
 - Deploying a specific contract:
-  - Create a separate deployment script and run `yarn deploy --file DeployYourContract.s.sol`
-
-#### Both Flavors
+  - Create a separate deployment script and extend `packages/foundry/scripts/runDeploy.mjs` to target it
 
 - After `yarn deploy`, ABIs are auto-generated to `packages/nextjs/contracts/deployedContracts.ts`
 
@@ -163,11 +134,7 @@ Use `notification` from `~~/utils/scaffold-eth` for success/error/warning feedba
 <button className="px-4 py-2 bg-blue-500 text-white rounded">Connect</button>
 ```
 
-### Configure Target Network before deploying to testnet / mainnet.
-
-#### Hardhat
-
-Add networks in `packages/hardhat/hardhat.config.ts` if not present.
+### Configure Target Network before deploying to a configured network.
 
 #### Foundry
 
@@ -186,7 +153,7 @@ Add networks in `packages/nextjs/scaffold.config.ts` if not present. This file a
 | `UpperCamelCase` | class / interface / type / enum / decorator / type parameters / component functions in TSX / JSXElement type parameter |
 | `lowerCamelCase` | variable / parameter / function / property / module alias                                                              |
 | `CONSTANT_CASE`  | constant / enum / global variables                                                                                     |
-| `snake_case`     | for hardhat deploy files and foundry script files                                                                      |
+| `snake_case`     | for foundry script files                                                                                                |
 
 ### Import Paths
 
@@ -220,7 +187,7 @@ Make comments that add information. Avoid redundant JSDoc for simple functions.
 
 ## Documentation
 
-Use **Context7 MCP** tools to fetch up-to-date documentation for any library (Wagmi, Viem, RainbowKit, DaisyUI, Hardhat, Next.js, etc.). Context7 is configured as an MCP server and provides access to indexed documentation with code examples.
+Use **Context7 MCP** tools to fetch up-to-date documentation for any library (Wagmi, Viem, RainbowKit, DaisyUI, Foundry, Next.js, etc.). Context7 is configured as an MCP server and provides access to indexed documentation with code examples.
 
 ## Skills & Agents Index
 

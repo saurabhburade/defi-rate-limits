@@ -1,0 +1,31 @@
+{
+  "name": "@se-2/foundry",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "account": "node scripts/listAccount.mjs",
+    "account:generate": "node scripts/generateAccount.mjs",
+    "account:import": "node scripts/importAccount.mjs",
+    "account:reveal-pk": "node scripts/revealPK.mjs",
+    "chain": "anvil --host 0.0.0.0 --port 8545 --chain-id 31337",
+    "check-types": "echo 'No TypeScript checks for Foundry workspace'",
+    "clean": "forge clean && rm -rf broadcast cache out",
+    "compile": "forge build",
+    "deploy": "node scripts/runDeploy.mjs",
+    "flatten": "forge flatten",
+    "fork": "node scripts/runAnvilFork.mjs",
+    "format": "forge fmt",
+    "generate": "yarn account:generate",
+    "lint": "forge fmt --check",
+    "lint-staged": "yarn format",
+    "test": "forge test --offline",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "@inquirer/password": "^4.0.2",
+    "dotenv": "^16.4.5",
+    "envfile": "^7.1.0",
+    "ethers": "^6.13.2",
+    "qrcode": "^1.5.4"
+  }
+}

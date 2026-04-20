@@ -32,14 +32,14 @@ Add to `packages/nextjs/package.json`:
 }
 ```
 
-### Hardhat package (for CLI payment script)
+### Foundry workspace script (for CLI payment script)
 
-If the user wants a CLI script to test API routes programmatically, add to `packages/hardhat/package.json`:
+If the user wants a CLI script to test API routes programmatically, add to `packages/foundry/package.json`:
 
 ```json
 {
   "scripts": {
-    "send402request": "hardhat run scripts/send402request.ts"
+    "send402request": "tsx scripts/send402request.ts"
   },
   "dependencies": {
     "@x402/core": "^2.2.0",
@@ -49,7 +49,7 @@ If the user wants a CLI script to test API routes programmatically, add to `pack
 }
 ```
 
-Add to root `package.json`: `"send402request": "yarn workspace @se-2/hardhat send402request"`
+Add to root `package.json`: `"send402request": "yarn workspace @se-2/foundry send402request"`
 
 ### Environment variables
 
@@ -75,7 +75,7 @@ x402 payments happen onchain, so `targetNetworks` must include a supported chain
 targetNetworks: [chains.baseSepolia],
 ```
 
-**Do not use `hardhat` (localhost) as the target network for x402** — the facilitator needs a real chain to verify/settle payments.
+**Do not use local Anvil as the target network for x402** — the facilitator needs a real chain to verify and settle payments.
 
 ## x402 Protocol Flow
 
@@ -181,7 +181,7 @@ Legacy network names (`base-sepolia`, `base`, etc.) may still work for backwards
 
 **Payments are in USDC by default.** The `$0.01` price syntax means USDC.
 
-**Don't use `hardhat` localhost as the network.** The facilitator can't verify or settle payments on a local chain. Always use a testnet (`eip155:84532`) even during development.
+**Don't use local Anvil as the network.** The facilitator can't verify or settle payments on a local chain. Always use a testnet (`eip155:84532`) even during development.
 
 **The `matcher` in `middleware.ts` must cover protected routes.** If you add a new protected route in the routes config but forget to add it to `matcher`, the middleware won't run on that route.
 
@@ -190,7 +190,7 @@ Legacy network names (`base-sepolia`, `base`, etc.) may still work for backwards
 For testing API routes programmatically (without a browser), create a script using `@x402/fetch`:
 
 ```typescript
-// packages/hardhat/scripts/send402request.ts
+// packages/foundry/scripts/send402request.ts
 import { privateKeyToAccount } from "viem/accounts";
 import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
 import { registerExactEvmScheme } from "@x402/evm/exact/client";
@@ -220,7 +220,7 @@ main().catch(console.error);
 3. `yarn start` — visit `http://localhost:3000`
 4. Navigate to a protected page — you should see the x402 paywall
 5. To test API routes: `curl http://localhost:3000/api/payment/builder` should return 402 with `PAYMENT-REQUIRED` header
-6. To test paid access: `yarn send402request` (needs funded wallet on Base Sepolia — get test USDC from [Circle faucet](https://faucet.circle.com/))
+6. To test paid access: `yarn send402request` (needs a funded wallet on Base Sepolia — get test USDC from [Circle faucet](https://faucet.circle.com/))
 
 ### Production
 

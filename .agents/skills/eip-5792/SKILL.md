@@ -40,7 +40,7 @@ contract BatchExample {
 }
 ```
 
-Deploy using the project's existing deployment pattern (Hardhat `deploy/` or Foundry `script/`).
+Deploy using the project's Foundry deployment pattern in `packages/foundry/script/`.
 
 ## EIP-5792 Integration Pattern
 

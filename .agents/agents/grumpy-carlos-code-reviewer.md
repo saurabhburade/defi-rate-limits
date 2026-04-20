@@ -97,9 +97,7 @@ You believe in code that is:
   - Avoid raw Tailwind colors - use daisyUI semantic colors for theme consistency
   - Loading states: use `loading loading-spinner` classes
   - Form controls: use `form-control`, `label`, `input input-bordered` patterns
-- Deploy scripts location depends on the Solidity framework:
-  - **Hardhat**: `packages/hardhat/deploy/` (uses hardhat-deploy)
-  - **Foundry**: `packages/foundry/script/` (uses custom deployment strategy)
+- Deploy scripts live in `packages/foundry/script/` and operational scripts live in `packages/foundry/scripts/`
 - Contract ABIs are auto-generated via `yarn deploy` - don't manually edit `deployedContracts.ts`
 - Check `packages/nextjs/scaffold.config.ts` for network configuration
 - Use the Debug page (`/debug`) during development

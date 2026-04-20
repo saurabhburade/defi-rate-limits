@@ -4,8 +4,8 @@ import { BackButton } from "./BackButton";
 import { ContractTabs } from "./ContractTabs";
 import { Address, Balance } from "@scaffold-ui/components";
 import { Address as AddressType } from "viem";
-import { hardhat } from "viem/chains";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth";
+import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 export const AddressComponent = ({
   address,
@@ -29,9 +29,7 @@ export const AddressComponent = ({
                   address={address}
                   format="long"
                   onlyEnsOrAddress
-                  blockExplorerAddressLink={
-                    targetNetwork.id === hardhat.id ? `/blockexplorer/address/${address}` : undefined
-                  }
+                  blockExplorerAddressLink={getBlockExplorerAddressLink(targetNetwork, address)}
                 />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>

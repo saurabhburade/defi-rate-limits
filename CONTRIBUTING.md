@@ -8,6 +8,8 @@ This guide aims to provide an overview of the contribution workflow to help us m
 
 Scaffold-ETH 2 is a minimal and forkable repo providing builders with a starter kit to build decentralized applications on Ethereum.
 
+This repository uses Foundry for contracts and Anvil for local development.
+
 Read the [README](README.md) to get an overview of the project.
 
 ### Vision
@@ -15,6 +17,8 @@ Read the [README](README.md) to get an overview of the project.
 The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application.
 
 The repo can be forked to include integrations and more features, but we want to keep the `main` branch simple and minimal.
+
+The current configured live testnets in the repo are Base Sepolia and Ethereum Sepolia.
 
 ### Project Status
 
@@ -27,6 +31,20 @@ You can view the open Issues, follow the development process, and contribute to 
 1. All code contributions require an Issue to be created and agreed upon by core contributors before submitting a Pull Request. This ensures proper discussion, alignment, and consensus on the proposed changes.
 2. Contributors must be humans, not bots.
 3. First-time contributions must not contain only spelling or grammatical fixes.
+
+### Local workflow
+
+For contract or frontend changes in this repo, use the Foundry workflow:
+
+```bash
+yarn chain
+yarn deploy
+yarn start
+yarn test
+yarn verify --network <network>
+```
+
+Use the configured network names from the repo, such as `baseSepolia` and `sepolia`.
 
 ## Getting started
 

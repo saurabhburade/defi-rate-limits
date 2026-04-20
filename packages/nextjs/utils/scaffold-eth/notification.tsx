@@ -23,11 +23,11 @@ type NotificationOptions = {
 };
 
 const ENUM_STATUSES = {
-  success: <CheckCircleIcon className="w-7 text-success" />,
-  loading: <span className="w-6 loading loading-spinner"></span>,
-  error: <ExclamationCircleIcon className="w-7 text-error" />,
-  info: <InformationCircleIcon className="w-7 text-info" />,
-  warning: <ExclamationTriangleIcon className="w-7 text-warning" />,
+  success: <CheckCircleIcon className="w-6 text-white" />,
+  loading: <span className="spinner text-white" />,
+  error: <ExclamationCircleIcon className="w-6 text-white" />,
+  info: <InformationCircleIcon className="w-6 text-white" />,
+  warning: <ExclamationTriangleIcon className="w-6 text-white" />,
 };
 
 const DEFAULT_DURATION = 3000;
@@ -46,7 +46,7 @@ const Notification = ({
   return toast.custom(
     (t: Toast) => (
       <div
-        className={`flex flex-row items-start justify-between max-w-sm rounded-xl shadow-center shadow-accent bg-base-200 p-4 transform-gpu relative transition-all duration-500 ease-in-out space-x-2
+        className={`relative flex max-w-sm transform-gpu items-start justify-between space-x-3 rounded-2xl border border-white/10 bg-[#0b0b0b] p-4 text-white shadow-[0_18px_60px_rgba(0,0,0,0.35)] transition-all duration-500 ease-in-out
         ${
           position.substring(0, 3) == "top"
             ? `hover:translate-y-1 ${t.visible ? "top-0" : "-top-96"}`
@@ -54,9 +54,16 @@ const Notification = ({
         }`}
       >
         <div className="leading-[0] self-center">{icon ? icon : ENUM_STATUSES[status]}</div>
-        <div className={`overflow-x-hidden break-words whitespace-pre-line ${icon ? "mt-1" : ""}`}>{content}</div>
+        <div
+          className={`overflow-x-hidden break-words whitespace-pre-line text-sm text-white/82 ${icon ? "mt-1" : ""}`}
+        >
+          {content}
+        </div>
 
-        <div className={`cursor-pointer text-lg ${icon ? "mt-1" : ""}`} onClick={() => toast.dismiss(t.id)}>
+        <div
+          className={`cursor-pointer text-lg text-white/50 ${icon ? "mt-1" : ""}`}
+          onClick={() => toast.dismiss(t.id)}
+        >
           <XMarkIcon className="w-6 cursor-pointer" onClick={() => toast.remove(t.id)} />
         </div>
       </div>

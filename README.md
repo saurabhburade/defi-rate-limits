@@ -1,91 +1,165 @@
-# 🏗 Scaffold-ETH 2
+# DeFi Rate Limit
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+Foundry + Anvil Scaffold-ETH 2 project for comparing two onchain rate-limiting models:
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+- `BucketedRateLimiter`: strict rolling one-hour cap using six 10-minute buckets
+- `TokenBucketRateLimiter`: burst-cap model with continuous per-second refill
 
-> [!NOTE]
-> 🤖 Scaffold-ETH 2 is AI-ready! It has everything agents need to build on Ethereum. Check `.agents/`, `.claude/`, `.opencode` or `.cursor/` for more info.
+The frontend includes:
 
-⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and Typescript.
+- a comparison page at `/`
+- a contract playground at `/debug`
+- a local-only block explorer for Anvil
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+## Stack
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+- Smart contracts: Foundry
+- Local chain: Anvil
+- Frontend: Next.js App Router + Wagmi + Viem + RainbowKit
+- Deploy artifact sync: Foundry deployments -> `packages/nextjs/contracts/deployedContracts.ts`
 
-## Requirements
+This repository no longer uses Hardhat.
 
-Before you begin, you need to install the following tools:
+## Repo Layout
 
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+- `packages/foundry/contracts/`: production contracts
+- `packages/foundry/script/`: Forge deployment scripts
+- `packages/foundry/scripts/`: deploy, verify, account, and artifact-sync helpers
+- `packages/foundry/test/`: Forge tests
+- `packages/foundry/deployments/`: synced deployment manifests
+- `packages/nextjs/`: frontend app
 
-## Quickstart
+## Local Development
 
-To get started with Scaffold-ETH 2, follow the steps below:
+Requirements:
 
-1. Install the latest version of Scaffold-ETH 2
+- Node `>= 20.18.3`
+- Yarn
+- Foundry / Anvil
 
-```
-npx create-eth@latest
-```
+Run these in separate terminals:
 
-This command will install all the necessary packages and dependencies, so it might take a while.
-
-> [!NOTE]
-> You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
-
-2. Run a local network in the first terminal:
-
-```
+```bash
 yarn chain
-```
-
-This command starts a local Ethereum network that runs on your local machine and can be used for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
-
-3. On a second terminal, deploy the test contract:
-
-```
 yarn deploy
-```
-
-This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
-
-4. On a third terminal, start your NextJS app:
-
-```
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Then open [http://localhost:3000](http://localhost:3000).
 
-**What's next**:
+Useful commands:
 
-Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
+```bash
+yarn compile
+yarn test
+yarn lint
+yarn format
+yarn next:build
+yarn next:check-types
+```
 
-- Edit your smart contracts
-- Edit your deployment scripts
-- Customize your frontend
-- Edit the app config
-- Writing and running tests
-- [Setting up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
+## Contracts
 
-## Documentation
+### `BucketedRateLimiter`
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
+- Fixed policy: `1 hour = 6 buckets x 10 minutes`
+- Keeps bounded storage by rotating six slots
+- Rejects borrows that exceed the live rolling-window remainder
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+Key reads:
 
-## Contributing to Scaffold-ETH 2
+- `windowUsage()`
+- `remainingCapacity()`
+- `recentBuckets()`
+- `previewBorrow(uint256)`
 
-We welcome contributions to Scaffold-ETH 2!
+### `TokenBucketRateLimiter`
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+- Maintains a burst ceiling with continuous refill
+- `capacity` is the last stored sample
+- `lastUpdate` is a Unix timestamp in seconds
+- live availability is computed from `capacity + elapsed * refillRate`, capped by `maxCapacity`
+
+Key reads:
+
+- `availableCapacity()`
+- `secondsUntilAvailable(uint256)`
+- `secondsUntilFull()`
+- `previewBorrow(uint256)`
+
+## Deployments
+
+Deployment manifests currently exist for:
+
+- `sepolia`
+- `baseSepolia`
+
+Contracts are synced into:
+
+- `packages/foundry/deployments/<network>/`
+- `packages/nextjs/contracts/deployedContracts.ts`
+
+Deploy to a configured network:
+
+```bash
+yarn deploy --network sepolia
+yarn deploy --network baseSepolia
+```
+
+Verify deployed contracts:
+
+```bash
+yarn verify --network sepolia
+yarn verify --network baseSepolia
+```
+
+`ETHERSCAN_V2_API_KEY` is required for verification.
+
+## Environment
+
+This repo reads env from the root `.env` and `packages/foundry/.env`.
+
+Common variables:
+
+```bash
+ALCHEMY_API_KEY=...
+BASE_SEPOLIA_RPC_URL=...
+DEPLOYER_PRIVATE_KEY=0x...
+# or DEPLOYER_PRIVATE_KEY_ENCRYPTED=...
+ETHERSCAN_V2_API_KEY=...
+NEXT_PUBLIC_ALCHEMY_API_KEY=...
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL=...
+NEXT_PUBLIC_SEPOLIA_RPC_URL=...
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=...
+```
+
+Account helpers:
+
+```bash
+yarn generate
+yarn account
+yarn account:import
+yarn account:reveal-pk
+```
+
+## Current Readiness
+
+What is in place:
+
+- Foundry-only contract workflow
+- Anvil-only local workflow
+- Synced frontend ABI/address wiring
+- Forge test coverage for both limiter models
+- NatSpec and audit-readiness documentation on contracts
+- Verification scripts for `sepolia`, `base`, and `baseSepolia`
+
+What still depends on runtime credentials or external execution:
+
+- live explorer verification
+- fresh deploy-and-verify smoke runs on testnets
+
+## Notes
+
+- The block explorer and faucet are local Anvil features, not public-network features.
+- `yarn next:check-types` now runs `next typegen` first, so it works from a clean checkout.
+- If you change contracts, rerun `yarn deploy` to regenerate frontend deployment metadata.

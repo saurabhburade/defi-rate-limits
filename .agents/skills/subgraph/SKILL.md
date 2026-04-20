@@ -351,7 +351,7 @@ const GreetingsTable = () => {
 
 **`create-local` only needs to run once.** It registers the subgraph name with the local Graph Node. Running it again will error with "subgraph already exists." Only re-run after `clean-node`.
 
-**Linux users need `--hostname 0.0.0.0`.** The default Hardhat/Anvil config binds to `127.0.0.1`, which Docker can't reach. Add `--hostname 0.0.0.0` (Hardhat) or `--host 0.0.0.0` (Anvil) to the chain command. You may also need `sudo ufw allow 8545/tcp`.
+**Linux users may need `--host 0.0.0.0`.** Anvil often binds to `127.0.0.1` by default, which Docker can't reach. Add `--host 0.0.0.0` to the chain command if the local Graph stack cannot connect. You may also need `sudo ufw allow 8545/tcp`.
 
 **Graph Client artifacts must be regenerated after schema changes.** Run `yarn graphclient:build` whenever you change the GraphQL schema or queries. The frontend imports from `~~/.graphclient` which contains generated types.
 

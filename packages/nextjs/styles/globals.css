@@ -1,116 +1,113 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
 @theme {
-  --shadow-center: 0 0 12px -2px rgb(0 0 0 / 0.05);
-  --animate-pulse-fast: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --shadow-center: 0 8px 32px rgb(0 0 0 / 0.12);
 }
 
-@plugin "daisyui" {
-  themes:
-    light,
-    dark --prefersdark;
-}
-
-@plugin "daisyui/theme" {
-  name: "light";
-
-  --color-primary: #93bbfb;
-  --color-primary-content: #212638;
-  --color-secondary: #dae8ff;
-  --color-secondary-content: #212638;
-  --color-accent: #93bbfb;
-  --color-accent-content: #212638;
-  --color-neutral: #212638;
-  --color-neutral-content: #ffffff;
-  --color-base-100: #ffffff;
-  --color-base-200: #f4f8ff;
-  --color-base-300: #dae8ff;
-  --color-base-content: #212638;
-  --color-info: #93bbfb;
-  --color-success: #34eeb6;
-  --color-warning: #ffcf72;
-  --color-error: #ff8863;
-
-  --radius-field: 1rem;
-  --radius-box: 1rem;
-  --tt-tailw: 6px;
-}
-
-@plugin "daisyui/theme" {
-  name: "dark";
-
-  --color-primary: #212638;
-  --color-primary-content: #f9fbff;
-  --color-secondary: #323f61;
-  --color-secondary-content: #f9fbff;
-  --color-accent: #4969a6;
-  --color-accent-content: #f9fbff;
-  --color-neutral: #f9fbff;
-  --color-neutral-content: #385183;
-  --color-base-100: #385183;
-  --color-base-200: #2a3655;
-  --color-base-300: #212638;
-  --color-base-content: #f9fbff;
-  --color-info: #385183;
-  --color-success: #34eeb6;
-  --color-warning: #ffcf72;
-  --color-error: #ff8863;
-
-  --radius-field: 1rem;
-  --radius-box: 1rem;
-
-  --tt-tailw: 6px;
-  --tt-bg: var(--color-primary);
-}
-
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
+  :root {
+    --background: #fafafa;
+    --surface: #ffffff;
+    --surface-muted: #f4f4f5;
+    --surface-strong: #e4e4e7;
+    --primary: #09090b;
+    --primary-hover: #27272a;
+    --primary-foreground: #fafafa;
+    --foreground: #09090b;
+    --muted-foreground: #52525b;
+    --border: rgb(9 9 11 / 0.1);
+    --ring: rgb(9 9 11 / 0.16);
+  }
+
+  [data-theme="dark"] {
+    --background: #050505;
+    --surface: #0b0b0b;
+    --surface-muted: #101010;
+    --surface-strong: #1b1b1b;
+    --primary: #fafafa;
+    --primary-hover: #e4e4e7;
+    --primary-foreground: #09090b;
+    --foreground: #fafafa;
+    --muted-foreground: #a1a1aa;
+    --border: rgb(255 255 255 / 0.09);
+    --ring: rgb(255 255 255 / 0.12);
+  }
+
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--border);
   }
 
-  p {
-    margin: 1rem 0;
+  html {
+    background: var(--background);
   }
 
   body {
     min-height: 100vh;
+    background:
+      radial-gradient(circle at top, rgb(255 255 255 / 0.04), transparent 28%),
+      linear-gradient(180deg, var(--background), var(--background));
+    color: var(--foreground);
+    font-family: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+  }
+
+  p {
+    margin: 0;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    margin-bottom: 0.5rem;
+    margin: 0;
     line-height: 1;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
   }
 }
 
-:root,
-[data-theme] {
-  background: var(--color-base-200);
+@layer utilities {
+  .surface {
+    background: var(--surface);
+  }
+
+  .surface-muted {
+    background: var(--surface-muted);
+  }
+
+  .surface-strong {
+    background: var(--surface-strong);
+  }
+
+  .text-foreground {
+    color: var(--foreground);
+  }
+
+  .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
+
+  .border-default {
+    border-color: var(--border);
+  }
+
+  .ring-default {
+    box-shadow: 0 0 0 1px var(--ring);
+  }
 }
 
-.btn {
-  @apply shadow-md;
-  border-radius: 9999rem;
-}
-
-.btn.btn-ghost {
-  @apply shadow-none;
+code,
+pre,
+.font-mono {
+  font-family: "SFMono-Regular", "Menlo", monospace;
 }
 
 .link {
@@ -118,5 +115,20 @@
 }
 
 .link:hover {
-  opacity: 80%;
+  opacity: 0.8;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  border: 2px solid rgb(255 255 255 / 0.2);
+  border-top-color: currentColor;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

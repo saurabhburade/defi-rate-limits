@@ -43,7 +43,7 @@ export const getAlchemyHttpUrl = (chainId: number) => {
 };
 
 export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
-  [chains.hardhat.id]: {
+  [chains.anvil.id]: {
     color: "#b8af0c",
   },
   [chains.mainnet.id]: {
@@ -96,6 +96,10 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
  * Gives the block explorer transaction URL, returns empty string if the network is a local chain
  */
 export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
+  if (chainId === chains.anvil.id) {
+    return `/blockexplorer/transaction/${txnHash}`;
+  }
+
   const chainNames = Object.keys(chains);
 
   const targetChainArr = chainNames.filter(chainName => {
@@ -122,10 +126,11 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
  * Defaults to Etherscan if no (wagmi) block explorer is configured for the network.
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
-  const blockExplorerBaseURL = network.blockExplorers?.default?.url;
-  if (network.id === chains.hardhat.id) {
+  if (network.id === chains.anvil.id) {
     return `/blockexplorer/address/${address}`;
   }
+
+  const blockExplorerBaseURL = network.blockExplorers?.default?.url;
 
   if (!blockExplorerBaseURL) {
     return `https://etherscan.io/address/${address}`;
@@ -143,3 +148,5 @@ export function getTargetNetworks(): ChainWithAttributes[] {
     ...NETWORKS_EXTRA_DATA[targetNetwork.id],
   }));
 }
+
+export const isLocalChain = (chainId: number) => chainId === chains.anvil.id;

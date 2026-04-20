@@ -8,12 +8,12 @@ import {
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
-import * as chains from "viem/chains";
 import scaffoldConfig, { type ScaffoldConfig } from "~~/scaffold.config";
+import { isLocalChain } from "~~/utils/scaffold-eth";
 
 const { burnerWalletMode, targetNetworks } = scaffoldConfig as ScaffoldConfig;
 
-const hasOnlyLocalTargetNetworks = targetNetworks.every(network => network.id === (chains.hardhat as chains.Chain).id);
+const hasOnlyLocalTargetNetworks = targetNetworks.every(network => isLocalChain(network.id));
 const showBurnerWallet =
   burnerWalletMode !== "disabled" && (burnerWalletMode === "allNetworks" || hasOnlyLocalTargetNetworks);
 

@@ -21,3 +21,12 @@ node_modules
 
 # cli
 dist
+.env
+packages/foundry/broadcast
+packages/foundry/cache
+packages/foundry/out
+
+# foundry
+packages/foundry/out
+packages/foundry/cache
+packages/foundry/broadcast

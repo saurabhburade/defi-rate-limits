@@ -123,12 +123,12 @@ The verify route should create a `publicClient` per chain to support smart contr
 
 ```typescript
 import { createPublicClient, http, type Chain } from "viem";
-import { mainnet, sepolia, hardhat /* ... */ } from "viem/chains";
+import { anvil, mainnet, sepolia /* ... */ } from "viem/chains";
 
 const SUPPORTED_CHAINS: Record<number, Chain> = {
   [mainnet.id]: mainnet,
   [sepolia.id]: sepolia,
-  [hardhat.id]: hardhat,
+  [anvil.id]: anvil,
 };
 
 // In verify route:
