@@ -363,7 +363,7 @@ export const RateLimitDemo = () => {
           <div>
             <Eyebrow>DeFi Rate Limit Lab</Eyebrow>
             <h1 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-4xl">
-              Production-style transaction flow for rate-limited borrows.
+              Reference transaction flow for rate-limited borrows.
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">
               Compare the two limiter mechanisms with the same reusable execution workflow: preflight on the public

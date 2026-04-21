@@ -9,7 +9,6 @@ The frontend includes:
 
 - a comparison page at `/`
 - a contract playground at `/debug`
-- a local-only block explorer for Anvil
 
 ## Stack
 
@@ -22,7 +21,7 @@ This repository no longer uses Hardhat.
 
 ## Repo Layout
 
-- `packages/foundry/contracts/`: production contracts
+- `packages/foundry/contracts/`: rate limiter contracts
 - `packages/foundry/script/`: Forge deployment scripts
 - `packages/foundry/scripts/`: deploy, verify, account, and artifact-sync helpers
 - `packages/foundry/test/`: Forge tests

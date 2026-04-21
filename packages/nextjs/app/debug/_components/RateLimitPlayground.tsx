@@ -123,7 +123,7 @@ const BucketedContractPanel = () => {
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <FieldCard
           title="Execution Flow"
-          description="The debug route uses the same four-stage execution path as production: validate, simulate, wallet approval, then confirmation."
+          description="The debug route uses the same four-stage reference flow: validate, simulate, wallet approval, then confirmation."
         >
           <BorrowFlowCard
             amount={amount}
@@ -270,7 +270,7 @@ const TokenBucketContractPanel = () => {
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <FieldCard
           title="Execution Flow"
-          description="This route is still production-like: simulate on the public client, wait for the wallet signature, then watch confirmation."
+          description="This route uses the same reference send flow: simulate on the public client, wait for the wallet signature, then watch confirmation."
         >
           <BorrowFlowCard
             amount={amount}
