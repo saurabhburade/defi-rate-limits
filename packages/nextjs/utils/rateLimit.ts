@@ -1,4 +1,4 @@
-import { getBlockExplorerTxLink } from "~~/utils/scaffold-eth";
+import { getBlockExplorerTxUrl } from "~~/config/web3";
 
 export const BORROW_GAS_LIMIT = 150_000n;
 
@@ -84,4 +84,4 @@ export const getErrorMessage = (error: unknown) => {
 };
 
 export const getExplorerTxUrl = (chainId: number, txHash?: `0x${string}`) =>
-  txHash ? getBlockExplorerTxLink(chainId, txHash) : "";
+  txHash ? getBlockExplorerTxUrl(chainId, txHash) : "";

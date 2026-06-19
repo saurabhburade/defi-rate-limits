@@ -1,6 +1,6 @@
 # DeFi Rate Limit
 
-Foundry + Anvil Scaffold-ETH 2 project for comparing two onchain rate-limiting models:
+Foundry + Anvil project for comparing two onchain rate-limiting models:
 
 - `BucketedRateLimiter`: strict rolling one-hour cap using six 10-minute buckets
 - `TokenBucketRateLimiter`: burst-cap model with continuous per-second refill
@@ -8,7 +8,7 @@ Foundry + Anvil Scaffold-ETH 2 project for comparing two onchain rate-limiting m
 The frontend includes:
 
 - a comparison page at `/`
-- a contract playground at `/debug`
+- a contract playground at `/playground`
 
 ## Stack
 
@@ -127,7 +127,6 @@ DEPLOYER_PRIVATE_KEY=0x...
 # or DEPLOYER_PRIVATE_KEY_ENCRYPTED=...
 ETHERSCAN_V2_API_KEY=...
 NEXT_PUBLIC_ALCHEMY_API_KEY=...
-NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL=...
 NEXT_PUBLIC_SEPOLIA_RPC_URL=...
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=...
 ```

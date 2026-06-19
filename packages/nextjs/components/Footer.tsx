@@ -1,5 +1,7 @@
 "use client";
 
+import { secondaryButtonClassName } from "~~/components/rate-limit/ui";
+
 export const Footer = () => {
   return (
     <footer className="border-t border-default px-4 py-5">
@@ -15,7 +17,7 @@ export const Footer = () => {
             href="https://github.com/saurabhburade/defi-rate-limits"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-xl border border-default bg-[color:var(--surface-muted)] px-3 py-2 text-xs text-muted-foreground transition hover:text-foreground"
+            className={`${secondaryButtonClassName} h-8 px-3 text-xs text-muted-foreground hover:text-foreground`}
           >
             GitHub
           </a>
@@ -23,7 +25,7 @@ export const Footer = () => {
             href="https://x.com/saurabh_evm"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-xl border border-default bg-[color:var(--surface-muted)] px-3 py-2 text-xs text-muted-foreground transition hover:text-foreground"
+            className={`${secondaryButtonClassName} h-8 px-3 text-xs text-muted-foreground hover:text-foreground`}
           >
             @saurabh_evm
           </a>

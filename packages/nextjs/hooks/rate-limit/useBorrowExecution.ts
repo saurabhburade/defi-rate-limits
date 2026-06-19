@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
-import { useDeployedContractInfo, useTargetNetwork } from "~~/hooks/scaffold-eth";
+import { getConfiguredChain } from "~~/config/web3";
+import { useDeployedContract } from "~~/hooks/useDeployedContract";
 import { BORROW_GAS_LIMIT, getErrorMessage, getExplorerTxUrl, safeParseAmount } from "~~/utils/rateLimit";
-import { AllowedChainIds } from "~~/utils/scaffold-eth";
-import { getParsedErrorWithAllAbis } from "~~/utils/scaffold-eth/contract";
+import { getParsedErrorWithKnownAbis } from "~~/utils/web3Errors";
 
 type BorrowableContractName = "BucketedRateLimiter" | "TokenBucketRateLimiter";
 type ExecutionPhase = "idle" | "simulating" | "simulated" | "awaiting_wallet" | "confirming" | "confirmed" | "failed";
@@ -57,7 +57,7 @@ const statusByPhase = (
     case "simulating":
       return {
         phase,
-        title: "Running preflight simulation",
+        title: "Running simulation",
         detail: "The app is checking the exact borrow call with the public client before any wallet prompt is shown.",
       };
     case "simulated":
@@ -75,8 +75,8 @@ const statusByPhase = (
     case "confirming":
       return {
         phase,
-        title: "Waiting for on-chain confirmation",
-        detail: "The transaction was sent. The UI is now waiting for the receipt from the selected network.",
+        title: "Transaction pending",
+        detail: "The wallet submitted the transaction. The UI is waiting for the selected network to confirm it.",
         txHash: txHash ?? undefined,
         explorerUrl,
       };
@@ -114,11 +114,12 @@ export const useBorrowExecution = ({
   const parsedAmount = useMemo(() => safeParseAmount(amount), [amount]);
   const contractAmount = useMemo(() => parsedAmount, [parsedAmount]);
   const amountKey = parsedAmount?.toString() ?? "";
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
   const { data: walletClient } = useWalletClient();
-  const { targetNetwork } = useTargetNetwork();
+  const targetNetwork = useMemo(() => getConfiguredChain(chain?.id), [chain?.id]);
   const publicClient = usePublicClient({ chainId: targetNetwork.id });
-  const { data: deployedContract } = useDeployedContractInfo({ contractName });
+  const { data: deployedContract } = useDeployedContract({ chainId: targetNetwork.id, contractName });
+  const clientReady = Boolean(address && walletClient && publicClient && deployedContract);
 
   const [phase, setPhase] = useState<ExecutionPhase>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -129,7 +130,7 @@ export const useBorrowExecution = ({
 
   const parseExecutionError = (error: unknown) => {
     try {
-      return getParsedErrorWithAllAbis(error, targetNetwork.id as AllowedChainIds);
+      return getParsedErrorWithKnownAbis(error, targetNetwork.id);
     } catch {
       return getErrorMessage(error);
     }
@@ -210,8 +211,6 @@ export const useBorrowExecution = ({
         throw new Error("Borrow request unexpectedly includes ETH value.");
       }
 
-      console.log(`[${contractName}.simulateContract] success`, simulation);
-      console.log(`[${contractName}.simulateContract.request]`, simulation.request);
       pushLog("success", "Simulation check passed: borrow call is allowed at the current onchain state.");
       pushLog("success", "ETH value check passed: the request has no ETH attached.");
       setPhase("simulated");
@@ -247,7 +246,6 @@ export const useBorrowExecution = ({
         gas: simulation.request.gas ?? BORROW_GAS_LIMIT,
       };
 
-      console.log(`[${contractName}.writeContract.request]`, writeRequest);
       pushLog(
         "info",
         `Prepared wallet contract write with gas ${(simulation.request.gas ?? BORROW_GAS_LIMIT).toString()} and wallet-managed fee estimation.`,
@@ -304,7 +302,7 @@ export const useBorrowExecution = ({
     },
     {
       key: "simulate",
-      label: "Simulate on public client",
+      label: "Validate executable onchain",
       detail:
         contractAmount !== undefined
           ? `Run publicClient.simulateContract(borrow(${contractAmount.toString()})) to catch limiter reverts before the wallet prompt.`
@@ -333,7 +331,7 @@ export const useBorrowExecution = ({
     },
     {
       key: "confirm",
-      label: "Confirm onchain",
+      label: phase === "confirming" ? "Transaction pending" : "Confirm onchain",
       detail: "Wait for the receipt so the UI only reports success after settlement.",
       status:
         failedStep === "confirm"
@@ -356,7 +354,7 @@ export const useBorrowExecution = ({
     steps,
     status,
     logs,
-    canSubmit: parsedAmount !== undefined && phase !== "awaiting_wallet" && phase !== "confirming",
+    canSubmit: parsedAmount !== undefined && clientReady && phase !== "awaiting_wallet" && phase !== "confirming",
     hasFreshSimulation: lastSimulatedAmountKey === amountKey && (phase === "simulated" || phase === "confirmed"),
   };
 };

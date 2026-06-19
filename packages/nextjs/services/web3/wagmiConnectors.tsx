@@ -7,25 +7,9 @@ import {
   safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { rainbowkitBurnerWallet } from "burner-connector";
-import scaffoldConfig, { type ScaffoldConfig } from "~~/scaffold.config";
-import { isLocalChain } from "~~/utils/scaffold-eth";
+import { walletConnectProjectId } from "~~/config/web3";
 
-const { burnerWalletMode, targetNetworks } = scaffoldConfig as ScaffoldConfig;
-
-const hasOnlyLocalTargetNetworks = targetNetworks.every(network => isLocalChain(network.id));
-const showBurnerWallet =
-  burnerWalletMode !== "disabled" && (burnerWalletMode === "allNetworks" || hasOnlyLocalTargetNetworks);
-
-const wallets = [
-  metaMaskWallet,
-  walletConnectWallet,
-  ledgerWallet,
-  baseAccount,
-  rainbowWallet,
-  safeWallet,
-  ...(showBurnerWallet ? [rainbowkitBurnerWallet] : []),
-];
+const wallets = [metaMaskWallet, walletConnectWallet, ledgerWallet, baseAccount, rainbowWallet, safeWallet];
 
 /**
  * wagmi connectors for the wagmi context
@@ -46,8 +30,8 @@ export const wagmiConnectors = () => {
     ],
 
     {
-      appName: "scaffold-eth-2",
-      projectId: scaffoldConfig.walletConnectProjectId,
+      appName: "DeFi Rate Limits",
+      projectId: walletConnectProjectId,
     },
   );
 };

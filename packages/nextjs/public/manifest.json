@@ -1,5 +1,5 @@
 {
-  "name": "Scaffold-ETH 2 DApp",
-  "description": "A DApp built with Scaffold-ETH",
+  "name": "DeFi Rate Limit Lab",
+  "description": "A POC comparing rolling-window and token-bucket rate limiters.",
   "iconPath": "logo.svg"
 }

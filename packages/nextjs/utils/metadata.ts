@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : `http://localhost:${process.env.PORT || 3000}`;
-const titleTemplate = "%s | Scaffold-ETH 2";
+
+const titleTemplate = "%s | DeFi Rate Limits";
 
 export const getMetadata = ({
   title,
@@ -22,25 +23,21 @@ export const getMetadata = ({
       default: title,
       template: titleTemplate,
     },
-    description: description,
+    description,
     openGraph: {
       title: {
         default: title,
         template: titleTemplate,
       },
-      description: description,
-      images: [
-        {
-          url: imageUrl,
-        },
-      ],
+      description,
+      images: [{ url: imageUrl }],
     },
     twitter: {
       title: {
         default: title,
         template: titleTemplate,
       },
-      description: description,
+      description,
       images: [imageUrl],
     },
     icons: {

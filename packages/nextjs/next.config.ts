@@ -12,18 +12,16 @@ const nextConfig: NextConfig = {
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     config.externals.push("pino-pretty", "lokijs", "encoding");
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      {
+        module:
+          /node_modules[\\/](?:@reown[\\/]appkit|@coinbase[\\/]cdp-sdk)[\\/]node_modules[\\/]ox[\\/]_esm[\\/]tempo[\\/]internal[\\/]virtualMasterPool\.js$/,
+        message: /Critical dependency: the request of a dependency is an expression/,
+      },
+    ];
     return config;
   },
 };
-
-const isIpfs = process.env.NEXT_PUBLIC_IPFS_BUILD === "true";
-
-if (isIpfs) {
-  nextConfig.output = "export";
-  nextConfig.trailingSlash = true;
-  nextConfig.images = {
-    unoptimized: true,
-  };
-}
 
 module.exports = nextConfig;

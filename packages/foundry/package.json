@@ -1,5 +1,5 @@
 {
-  "name": "@se-2/foundry",
+  "name": "@defi-rate-limits/foundry",
   "private": true,
   "version": "0.0.1",
   "scripts": {
