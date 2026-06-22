@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
-import { getConfiguredChain } from "~~/config/web3";
+import { getChainDisplayName, getConfiguredChain } from "~~/config/web3";
 import { useDeployedContract } from "~~/hooks/useDeployedContract";
 import { BORROW_GAS_LIMIT, getErrorMessage, getExplorerTxUrl, safeParseAmount } from "~~/utils/rateLimit";
 import { getParsedErrorWithKnownAbis } from "~~/utils/web3Errors";
@@ -354,6 +354,7 @@ export const useBorrowExecution = ({
     steps,
     status,
     logs,
+    chainTag: getChainDisplayName(targetNetwork),
     canSubmit: parsedAmount !== undefined && clientReady && phase !== "awaiting_wallet" && phase !== "confirming",
     hasFreshSimulation: lastSimulatedAmountKey === amountKey && (phase === "simulated" || phase === "confirmed"),
   };

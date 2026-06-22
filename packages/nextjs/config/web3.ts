@@ -34,11 +34,17 @@ const rpcChainNames: Record<number, string> = {
   [chains.baseSepolia.id]: "base-sepolia",
 };
 
+const chainDisplayNames: Partial<Record<number, string>> = {
+  [chains.sepolia.id]: "Ethereum Sepolia",
+};
+
 export const getAlchemyHttpUrl = (chainId: number) =>
   alchemyApiKey && rpcChainNames[chainId] ? `https://${rpcChainNames[chainId]}.g.alchemy.com/v2/${alchemyApiKey}` : "";
 
 export const getConfiguredChain = (chainId?: number) =>
   targetNetworks.find(network => network.id === chainId) ?? targetNetworks[0];
+
+export const getChainDisplayName = (chain: Chain) => chainDisplayNames[chain.id] ?? chain.name;
 
 export const getBlockExplorerTxUrl = (chainId: number, txHash: string) => {
   const network = targetNetworks.find(targetNetwork => targetNetwork.id === chainId);

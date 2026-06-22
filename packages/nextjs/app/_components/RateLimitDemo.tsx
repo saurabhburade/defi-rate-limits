@@ -84,6 +84,7 @@ const BucketedPanel = () => {
         amountPlaceholder="250000"
         busy={isBusy}
         canSubmit={execution.canSubmit}
+        chainTag={execution.chainTag}
         onAmountChange={setAmount}
         onSend={execution.send}
         onSimulate={execution.simulate}
@@ -174,6 +175,7 @@ const TokenPanel = () => {
         amountPlaceholder="200000"
         busy={isBusy}
         canSubmit={execution.canSubmit}
+        chainTag={execution.chainTag}
         onAmountChange={setAmount}
         onSend={execution.send}
         onSimulate={execution.simulate}

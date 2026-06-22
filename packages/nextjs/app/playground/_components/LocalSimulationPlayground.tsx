@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { AvatarComponent } from "@rainbow-me/rainbowkit";
 import {
   BucketedRateLimiterSourceButton,
   TokenBucketRateLimiterSourceButton,
@@ -123,7 +124,6 @@ const BucketedLocalPanel = ({
             <BucketedRateLimiterSourceButton />
           </div>
         </div>
-
         <div className="mt-8">
           <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_12rem] xl:items-end">
             <MetricStrip
@@ -148,6 +148,7 @@ const BucketedLocalPanel = ({
         busyButton={execution.phase === "simulating" ? "simulate" : "send"}
         busyLabel="Applying"
         canSubmit={execution.canSubmit}
+        chainTag="local"
         onAmountChange={onAmountChange}
         onReset={onReset}
         onSend={execution.apply}
@@ -244,6 +245,7 @@ const TokenLocalPanel = ({
         busyButton={execution.phase === "simulating" ? "simulate" : "send"}
         busyLabel="Applying"
         canSubmit={execution.canSubmit}
+        chainTag="local"
         onAmountChange={onAmountChange}
         onReset={onReset}
         onSend={execution.apply}
