@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { BORROW_GAS_LIMIT } from "@/configs/contracts/constants";
+import { getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/chains";
+import { getBlockExplorerTxUrl } from "@/configs/wagmi/explorers";
+import { useDeployedContract } from "@/hooks/useDeployedContract";
+import { getErrorMessage, getParsedErrorWithKnownAbis } from "@/libs/contracts/errors";
+import { safeParseAmount } from "@/libs/rate-limit/formatting";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
-import { getChainDisplayName, getConfiguredChain } from "~~/config/web3";
-import { useDeployedContract } from "~~/hooks/useDeployedContract";
-import { BORROW_GAS_LIMIT, getErrorMessage, getExplorerTxUrl, safeParseAmount } from "~~/utils/rateLimit";
-import { getParsedErrorWithKnownAbis } from "~~/utils/web3Errors";
 
 type BorrowableContractName = "BucketedRateLimiter" | "TokenBucketRateLimiter";
 type ExecutionPhase = "idle" | "simulating" | "simulated" | "awaiting_wallet" | "confirming" | "confirmed" | "failed";
@@ -284,7 +286,7 @@ export const useBorrowExecution = ({
     }
   };
 
-  const explorerUrl = getExplorerTxUrl(targetNetwork.id, txHash ?? undefined);
+  const explorerUrl = txHash ? getBlockExplorerTxUrl(targetNetwork.id, txHash) : "";
   const status =
     phase === "idle"
       ? { ...defaultStatus, detail: idleDetail }

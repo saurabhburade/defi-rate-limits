@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { getConfiguredChain } from "@/configs/wagmi/chains";
+import { type Contract, type ContractName, getContract } from "@/libs/contracts/getContract";
 import { usePublicClient } from "wagmi";
-import { getConfiguredChain } from "~~/config/web3";
-import { type Contract, type ContractName, getContract } from "~~/contracts";
 
 type DeployedContractResult<TContractName extends ContractName> = {
   data: Contract<TContractName> | undefined;

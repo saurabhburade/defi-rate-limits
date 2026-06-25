@@ -8,6 +8,7 @@
 
 @layer base {
   :root {
+    --font-inter: "Inter", "Avenir Next", "Segoe UI", sans-serif;
     --surface: var(--card);
     --surface-muted: var(--muted);
     --surface-strong: var(--accent);
@@ -55,6 +56,11 @@
   select {
     font: inherit;
   }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
