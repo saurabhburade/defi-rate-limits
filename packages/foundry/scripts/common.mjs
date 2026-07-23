@@ -171,7 +171,7 @@ export async function resolvePrivateKey(networkName) {
 
   const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
   if (!encryptedKey) {
-    throw new Error("No deployer key found. Run `yarn generate` or `yarn account:import` first.");
+    throw new Error("No deployer key found. Run `pnpm generate` or `pnpm account:import` first.");
   }
 
   const pass = await password({ message: "Enter password to decrypt private key:" });
@@ -187,7 +187,7 @@ export async function decryptConfiguredWallet() {
   const [{ Wallet }, { default: password }] = await Promise.all([import("ethers"), import("@inquirer/password")]);
   const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
   if (!encryptedKey) {
-    throw new Error("You don't have a deployer account. Run `yarn generate` or `yarn account:import` first");
+    throw new Error("You don't have a deployer account. Run `pnpm generate` or `pnpm account:import` first");
   }
 
   const pass = await password({ message: "Enter your password to decrypt the private key:" });

@@ -15,9 +15,9 @@
     "flatten": "forge flatten",
     "fork": "node scripts/runAnvilFork.mjs",
     "format": "forge fmt",
-    "generate": "yarn account:generate",
+    "generate": "pnpm run account:generate",
     "lint": "forge fmt --check",
-    "lint-staged": "yarn format",
+    "lint-staged": "pnpm run format",
     "test": "forge test --offline",
     "verify": "node scripts/verify.mjs"
   },
