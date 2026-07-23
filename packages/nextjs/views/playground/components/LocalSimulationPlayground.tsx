@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { buttonBaseClassName } from "@/components/common/Button";
-import { useNowSeconds } from "@/hooks/useNowSeconds";
 import {
   DEFAULT_BUCKETED_WINDOW_PRESET,
   createInitialBucketedLocalState,
@@ -41,7 +40,6 @@ const MechanismButton = ({
 );
 
 export const LocalSimulationPlayground = () => {
-  const currentNowSeconds = useNowSeconds();
   const [activeMechanism, setActiveMechanism] = useState<Mechanism>("bucketed");
   const [bucketedWindowPreset, setBucketedWindowPreset] =
     useState<BucketedWindowPreset>(DEFAULT_BUCKETED_WINDOW_PRESET);
@@ -90,26 +88,24 @@ export const LocalSimulationPlayground = () => {
       <div className="mt-10">
         {activeMechanism === "bucketed" ? (
           <BucketedLocalPanel
+            key={`bucketed-${resetKey}`}
             amount={bucketedAmount}
             amountPlaceholder={DEFAULT_BUCKETED_AMOUNT}
             bucketedState={bucketedState}
-            currentNowSeconds={currentNowSeconds}
             onAmountChange={setBucketedAmount}
             onReset={resetPlayground}
             onWindowPresetChange={setBucketedLimitWindow}
-            resetKey={resetKey}
             setBucketedState={setBucketedState}
             windowConfig={bucketedWindowConfig}
             windowPreset={bucketedWindowPreset}
           />
         ) : (
           <TokenLocalPanel
+            key={`token-${resetKey}`}
             amount={tokenAmount}
             amountPlaceholder={DEFAULT_TOKEN_AMOUNT}
-            currentNowSeconds={currentNowSeconds}
             onAmountChange={setTokenAmount}
             onReset={resetPlayground}
-            resetKey={resetKey}
             setTokenState={setTokenState}
             tokenState={tokenState}
           />

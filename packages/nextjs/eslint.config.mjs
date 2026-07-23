@@ -1,41 +1,20 @@
-import { FlatCompat } from "@eslint/eslintrc";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+import prettierConfig from "eslint-config-prettier/flat";
 import prettierPlugin from "eslint-plugin-prettier";
 import { defineConfig, globalIgnores } from "eslint/config";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 export default defineConfig([
-  globalIgnores([".next/**", ".vercel/**", "out/**", "build/**", "next-env.d.ts"]),
+  ...nextVitals,
+  ...nextTs,
+  prettierConfig,
   {
     plugins: {
       prettier: prettierPlugin,
     },
-    extends: compat.extends(
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "plugin:@next/next/core-web-vitals",
-      "plugin:@typescript-eslint/recommended",
-      "prettier",
-    ),
-
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
-
     rules: {
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-ts-comment": "off",
-
       "prettier/prettier": [
         "warn",
         {
@@ -44,4 +23,5 @@ export default defineConfig([
       ],
     },
   },
+  globalIgnores([".next/**", ".vercel/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);

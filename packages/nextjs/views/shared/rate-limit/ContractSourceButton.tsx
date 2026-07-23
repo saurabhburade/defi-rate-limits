@@ -85,9 +85,7 @@ export const ContractSourceButton = ({ fileName, loadSource }: { fileName: strin
 export const BucketedRateLimiterSourceButton = () => (
   <ContractSourceButton
     fileName="BucketedRateLimiter.sol"
-    loadSource={() =>
-      import("@/configs/contracts/sources/bucketedRateLimiterSource").then(mod => mod.bucketedRateLimiterSource)
-    }
+    loadSource={() => import("@/configs/sources/bucketedRateLimiterSource").then(mod => mod.bucketedRateLimiterSource)}
   />
 );
 
@@ -95,7 +93,7 @@ export const TokenBucketRateLimiterSourceButton = () => (
   <ContractSourceButton
     fileName="TokenBucketRateLimiter.sol"
     loadSource={() =>
-      import("@/configs/contracts/sources/tokenBucketRateLimiterSource").then(mod => mod.tokenBucketRateLimiterSource)
+      import("@/configs/sources/tokenBucketRateLimiterSource").then(mod => mod.tokenBucketRateLimiterSource)
     }
   />
 );

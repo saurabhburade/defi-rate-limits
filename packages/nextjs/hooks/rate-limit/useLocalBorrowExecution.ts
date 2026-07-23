@@ -66,13 +66,11 @@ export const useLocalBorrowExecution = ({
   applyBorrow,
   idleDetail,
   previewBorrow,
-  resetKey,
 }: {
   amount: string;
   applyBorrow: (amount: bigint, currentNowSeconds: number) => LocalBorrowApplyResult;
   idleDetail: string;
   previewBorrow: (amount: bigint, currentNowSeconds: number) => LocalBorrowPreview;
-  resetKey: number;
 }) => {
   const parsedAmount = useMemo(() => safeParseAmount(amount), [amount]);
   const amountKey = parsedAmount?.toString() ?? "";
@@ -113,14 +111,14 @@ export const useLocalBorrowExecution = ({
     };
   }, []);
 
-  useEffect(() => {
+  const reset = useCallback(() => {
     operationIdRef.current += 1;
     setPhase("idle");
     setErrorMessage(null);
     setFailedStep(null);
     setLastSimulatedAmountKey("");
     setLogs([]);
-  }, [amountKey, resetKey]);
+  }, []);
 
   const startOperation = () => {
     operationIdRef.current += 1;
@@ -259,6 +257,7 @@ export const useLocalBorrowExecution = ({
     logs,
     parsedAmount,
     phase,
+    reset,
     simulate,
     status: statusByPhase(phase, idleDetail, errorMessage),
     steps,

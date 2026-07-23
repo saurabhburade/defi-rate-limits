@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { useLocalBorrowExecution } from "@/hooks/rate-limit/useLocalBorrowExecution";
+import { useNowSeconds } from "@/hooks/useNowSeconds";
 import { formatAmount, formatDuration } from "@/libs/rate-limit/formatting";
 import {
   applyTokenBucketLocalBorrow,
@@ -18,22 +19,19 @@ import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
 export const TokenLocalPanel = ({
   amount,
   amountPlaceholder,
-  currentNowSeconds,
   onAmountChange,
   onReset,
-  resetKey,
   setTokenState,
   tokenState,
 }: {
   amount: string;
   amountPlaceholder: string;
-  currentNowSeconds: number;
   onAmountChange: (value: string) => void;
   onReset: () => void;
-  resetKey: number;
   setTokenState: (state: TokenBucketLocalState) => void;
   tokenState: TokenBucketLocalState;
 }) => {
+  const currentNowSeconds = useNowSeconds();
   const snapshot = useMemo(
     () => getTokenBucketLocalSnapshot(tokenState, currentNowSeconds),
     [currentNowSeconds, tokenState],
@@ -57,9 +55,12 @@ export const TokenLocalPanel = ({
     applyBorrow,
     idleDetail: "Run a local preview before applying the borrow to this page state.",
     previewBorrow,
-    resetKey,
   });
   const refillPerMinute = snapshot.refillRate * 60n;
+  const handleAmountChange = (value: string) => {
+    execution.reset();
+    onAmountChange(value);
+  };
 
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
@@ -94,7 +95,7 @@ export const TokenLocalPanel = ({
         busyLabel="Applying"
         canSubmit={execution.canSubmit}
         chainTag="local"
-        onAmountChange={onAmountChange}
+        onAmountChange={handleAmountChange}
         onReset={onReset}
         onSend={execution.apply}
         onSimulate={execution.simulate}

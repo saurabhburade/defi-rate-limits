@@ -5,7 +5,7 @@ const AmountValue = ({ value }: { value: string }) => {
   const unit = unitParts.join(" ");
 
   return (
-    <p className="mt-2 flex items-end gap-1.5 text-2xl font-semibold tracking-[-0.03em] text-foreground">
+    <p className="mt-2 flex min-h-10 items-end gap-1.5 text-2xl font-semibold tracking-[-0.03em] text-foreground">
       <span>{amount}</span>
       {unit ? <span className="pb-0.5 text-sm font-medium tracking-normal text-muted-foreground">{unit}</span> : null}
     </p>

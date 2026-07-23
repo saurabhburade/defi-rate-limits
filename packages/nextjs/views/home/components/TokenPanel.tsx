@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
+import { getContract } from "@/configs/contracts";
+import { getConfiguredChain } from "@/configs/wagmi/config";
 import { useBorrowExecution } from "@/hooks/rate-limit/useBorrowExecution";
 import { useLiveTokenBucketMetrics } from "@/hooks/rate-limit/useLiveTokenBucketMetrics";
-import { useDeployedContract } from "@/hooks/useDeployedContract";
 import { formatAmount, formatDuration } from "@/libs/rate-limit/formatting";
 import { TokenBucketRateLimiterSourceButton } from "@/views/shared/rate-limit/ContractSourceButton";
 import { ExecutionTimeline } from "@/views/shared/rate-limit/ExecutionTimeline";
@@ -12,9 +13,51 @@ import { ReservoirMeter } from "@/views/shared/rate-limit/ReservoirMeter";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
 import { useReadContracts } from "wagmi";
 
+const tokenContract = getContract("TokenBucketRateLimiter", getConfiguredChain().id);
+
+const TokenMetrics = memo(function TokenMetrics({
+  availableCapacity,
+  maxCapacity,
+  refillRate,
+  sampledAtMs,
+  secondsUntilFull,
+}: {
+  availableCapacity?: bigint;
+  maxCapacity?: bigint;
+  refillRate?: bigint;
+  sampledAtMs?: number;
+  secondsUntilFull?: bigint;
+}) {
+  const { liveAvailableCapacity, liveSecondsUntilFull } = useLiveTokenBucketMetrics({
+    animateAvailable: true,
+    availableCapacity,
+    maxCapacity,
+    refillRate,
+    sampledAtMs,
+    secondsUntilFull,
+  });
+  const refillPerMinute = refillRate !== undefined ? refillRate * 60n : undefined;
+
+  return (
+    <>
+      <div className="mt-8">
+        <MetricStrip
+          items={[
+            { label: "Capacity", value: formatAmount(maxCapacity, true) },
+            { label: "Available", value: formatAmount(liveAvailableCapacity, true) },
+            { label: "Refill / Min", value: formatAmount(refillPerMinute, true) },
+            { label: "Full In", value: formatDuration(liveSecondsUntilFull) },
+          ]}
+        />
+      </div>
+
+      <ReservoirMeter total={maxCapacity} value={liveAvailableCapacity} />
+    </>
+  );
+});
+
 export const TokenPanel = () => {
   const [amount, setAmount] = useState("200000");
-  const { data: tokenContract } = useDeployedContract({ contractName: "TokenBucketRateLimiter" });
   const execution = useBorrowExecution({
     contractName: "TokenBucketRateLimiter",
     amount,
@@ -22,7 +65,7 @@ export const TokenPanel = () => {
       "Run the same simulation first so the app can prove the reservoir has enough capacity before wallet approval.",
   });
 
-  const { data: tokenReads } = useReadContracts({
+  const { data: tokenReads, dataUpdatedAt: tokenReadsUpdatedAt } = useReadContracts({
     allowFailure: false,
     contracts: tokenContract
       ? [
@@ -34,7 +77,6 @@ export const TokenPanel = () => {
       : [],
     query: {
       enabled: Boolean(tokenContract),
-      refetchInterval: 3000,
     },
   });
 
@@ -42,16 +84,12 @@ export const TokenPanel = () => {
   const refillRate = tokenReads?.[1] as bigint | undefined;
   const availableCapacity = tokenReads?.[2] as bigint | undefined;
   const secondsUntilFull = tokenReads?.[3] as bigint | undefined;
-  const { liveAvailableCapacity, liveSecondsUntilFull } = useLiveTokenBucketMetrics({
-    animateAvailable: true,
-    availableCapacity,
-    maxCapacity,
-    refillRate,
-    secondsUntilFull,
-  });
   const isBusy =
     execution.phase === "simulating" || execution.phase === "awaiting_wallet" || execution.phase === "confirming";
-  const refillPerMinute = refillRate ? refillRate * 60n : undefined;
+  const handleAmountChange = (value: string) => {
+    execution.reset();
+    setAmount(value);
+  };
 
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
@@ -64,18 +102,13 @@ export const TokenPanel = () => {
           </div>
         </div>
 
-        <div className="mt-8">
-          <MetricStrip
-            items={[
-              { label: "Capacity", value: formatAmount(maxCapacity, true) },
-              { label: "Available", value: formatAmount(liveAvailableCapacity, true) },
-              { label: "Refill / Min", value: formatAmount(refillPerMinute, true) },
-              { label: "Full In", value: formatDuration(liveSecondsUntilFull) },
-            ]}
-          />
-        </div>
-
-        <ReservoirMeter total={maxCapacity} value={liveAvailableCapacity} />
+        <TokenMetrics
+          availableCapacity={availableCapacity}
+          maxCapacity={maxCapacity}
+          refillRate={refillRate}
+          sampledAtMs={tokenReadsUpdatedAt || undefined}
+          secondsUntilFull={secondsUntilFull}
+        />
       </div>
 
       <WorkflowPanel
@@ -84,7 +117,7 @@ export const TokenPanel = () => {
         busy={isBusy}
         canSubmit={execution.canSubmit}
         chainTag={execution.chainTag}
-        onAmountChange={setAmount}
+        onAmountChange={handleAmountChange}
         onSend={execution.send}
         onSimulate={execution.simulate}
         simulateLabel="Validate"

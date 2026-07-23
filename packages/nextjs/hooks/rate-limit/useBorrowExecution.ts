@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { BORROW_GAS_LIMIT } from "@/configs/contracts/constants";
-import { getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/chains";
-import { getBlockExplorerTxUrl } from "@/configs/wagmi/explorers";
-import { useDeployedContract } from "@/hooks/useDeployedContract";
+import { useCallback, useMemo, useState } from "react";
+import { BORROW_GAS_LIMIT } from "@/configs/constants";
+import { getContract } from "@/configs/contracts";
+import { getBlockExplorerTxUrl, getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/config";
 import { getErrorMessage, getParsedErrorWithKnownAbis } from "@/libs/contracts/errors";
 import { safeParseAmount } from "@/libs/rate-limit/formatting";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 
 type BorrowableContractName = "BucketedRateLimiter" | "TokenBucketRateLimiter";
@@ -114,13 +114,14 @@ export const useBorrowExecution = ({
   idleDetail: string;
 }) => {
   const parsedAmount = useMemo(() => safeParseAmount(amount), [amount]);
-  const contractAmount = useMemo(() => parsedAmount, [parsedAmount]);
+  const contractAmount = parsedAmount;
   const amountKey = parsedAmount?.toString() ?? "";
+  const queryClient = useQueryClient();
   const { address, chain } = useAccount();
   const { data: walletClient } = useWalletClient();
   const targetNetwork = useMemo(() => getConfiguredChain(chain?.id), [chain?.id]);
   const publicClient = usePublicClient({ chainId: targetNetwork.id });
-  const { data: deployedContract } = useDeployedContract({ chainId: targetNetwork.id, contractName });
+  const deployedContract = getContract(contractName, targetNetwork.id);
   const clientReady = Boolean(address && walletClient && publicClient && deployedContract);
 
   const [phase, setPhase] = useState<ExecutionPhase>("idle");
@@ -132,7 +133,7 @@ export const useBorrowExecution = ({
 
   const parseExecutionError = (error: unknown) => {
     try {
-      return getParsedErrorWithKnownAbis(error, targetNetwork.id);
+      return getParsedErrorWithKnownAbis(error);
     } catch {
       return getErrorMessage(error);
     }
@@ -142,13 +143,14 @@ export const useBorrowExecution = ({
     setLogs(current => [...current, { id: Date.now() + current.length, level, message }]);
   };
 
-  useEffect(() => {
+  const reset = useCallback(() => {
     setPhase("idle");
     setErrorMessage(null);
     setFailedStep(null);
+    setLastSimulatedAmountKey("");
     setTxHash(null);
     setLogs([]);
-  }, [amountKey, contractName]);
+  }, []);
 
   const validate = () => {
     if (parsedAmount === undefined || contractAmount === undefined) {
@@ -267,6 +269,7 @@ export const useBorrowExecution = ({
       setPhase("confirmed");
       setLastSimulatedAmountKey(amountKey);
       pushLog("success", "Onchain confirmation received. Borrow transaction settled successfully.");
+      void queryClient.invalidateQueries({ queryKey: ["readContracts"] });
     } catch (error) {
       if (isUserRejectedError(error)) {
         console.info(`[${contractName}.writeContract] user rejected`, error);
@@ -356,6 +359,7 @@ export const useBorrowExecution = ({
     steps,
     status,
     logs,
+    reset,
     chainTag: getChainDisplayName(targetNetwork),
     canSubmit: parsedAmount !== undefined && clientReady && phase !== "awaiting_wallet" && phase !== "confirming",
     hasFreshSimulation: lastSimulatedAmountKey === amountKey && (phase === "simulated" || phase === "confirmed"),

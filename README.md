@@ -15,7 +15,7 @@ The frontend includes:
 - Smart contracts: Foundry
 - Local chain: Anvil
 - Frontend: Next.js App Router + Wagmi + Viem + RainbowKit
-- Deploy artifact sync: Foundry deployments -> `packages/nextjs/contracts/deployedContracts.ts`
+- Frontend contract configuration: manually maintained in `packages/nextjs/configs/abis.ts` and `contracts.ts`
 
 This repository no longer uses Hardhat.
 
@@ -23,7 +23,7 @@ This repository no longer uses Hardhat.
 
 - `packages/foundry/contracts/`: rate limiter contracts
 - `packages/foundry/script/`: Forge deployment scripts
-- `packages/foundry/scripts/`: deploy, verify, account, and artifact-sync helpers
+- `packages/foundry/scripts/`: deploy, verify, account, and deployment-manifest helpers
 - `packages/foundry/test/`: Forge tests
 - `packages/foundry/deployments/`: synced deployment manifests
 - `packages/nextjs/`: frontend app
@@ -93,10 +93,14 @@ Deployment manifests currently exist for:
 - `sepolia`
 - `baseSepolia`
 
-Contracts are synced into:
+Deployment manifests are synced into:
 
 - `packages/foundry/deployments/<network>/`
-- `packages/nextjs/contracts/deployedContracts.ts`
+
+Frontend ABIs and addresses are maintained manually in:
+
+- `packages/nextjs/configs/abis.ts`
+- `packages/nextjs/configs/contracts.ts`
 
 Deploy to a configured network:
 
@@ -126,8 +130,6 @@ BASE_SEPOLIA_RPC_URL=...
 DEPLOYER_PRIVATE_KEY=0x...
 # or DEPLOYER_PRIVATE_KEY_ENCRYPTED=...
 ETHERSCAN_V2_API_KEY=...
-NEXT_PUBLIC_ALCHEMY_API_KEY=...
-NEXT_PUBLIC_SEPOLIA_RPC_URL=...
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=...
 ```
 

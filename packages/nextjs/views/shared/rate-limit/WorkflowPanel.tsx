@@ -37,7 +37,7 @@ export const WorkflowPanel = ({
   timeline: React.ReactNode;
 }) => (
   <aside className="rounded-2xl bg-[color:var(--surface-muted)] px-5 py-5">
-    <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="flex min-h-8 flex-wrap items-center justify-between gap-3">
       <div className="flex min-w-0 flex-wrap items-center gap-2">
         <h3 className="text-lg font-semibold tracking-[-0.02em] text-foreground">Borrow workflow</h3>
         {chainTag ? (
@@ -47,7 +47,7 @@ export const WorkflowPanel = ({
         ) : null}
       </div>
       {onReset ? (
-        <button className={secondaryButtonClassName} onClick={onReset} type="button">
+        <button className={`${secondaryButtonClassName} h-8! px-3! text-xs!`} onClick={onReset} type="button">
           Reset
         </button>
       ) : null}
