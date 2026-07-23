@@ -1,6 +1,6 @@
 import { FlatCompat } from "@eslint/eslintrc";
 import prettierPlugin from "eslint-plugin-prettier";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,13 +11,28 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
+  globalIgnores([".next/**", ".vercel/**", "out/**", "build/**", "next-env.d.ts"]),
   {
     plugins: {
       prettier: prettierPlugin,
     },
-    extends: compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
+    extends: compat.extends(
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:@next/next/core-web-vitals",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+    ),
+
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
 
     rules: {
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-ts-comment": "off",
 

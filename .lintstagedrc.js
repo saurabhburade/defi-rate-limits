@@ -1,12 +1,14 @@
 const path = require("path");
 
 const buildNextEslintCommand = (filenames) =>
-  `yarn workspace @defi-rate-limits/nextjs lint --fix --file ${filenames
-    .map((f) => path.relative(path.join("packages", "nextjs"), f))
-    .join(" --file ")}`;
+  `pnpm --filter @defi-rate-limits/nextjs exec eslint --fix ${filenames
+    .map((f) =>
+      JSON.stringify(path.relative(path.join("packages", "nextjs"), f)),
+    )
+    .join(" ")}`;
 
 const checkTypesNextCommand = () =>
-  "yarn workspace @defi-rate-limits/nextjs check-types";
+  "pnpm --filter @defi-rate-limits/nextjs run check-types";
 
 module.exports = {
   "packages/nextjs/**/*.{ts,tsx}": [
@@ -14,6 +16,6 @@ module.exports = {
     checkTypesNextCommand,
   ],
   "packages/foundry/**/*.{sol,mjs,toml}": [
-    "yarn workspace @defi-rate-limits/foundry lint-staged",
+    "pnpm --filter @defi-rate-limits/foundry run lint-staged",
   ],
 };

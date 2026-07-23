@@ -9,32 +9,35 @@
     ]
   },
   "scripts": {
-    "account": "yarn workspace @defi-rate-limits/foundry account",
-    "account:import": "yarn workspace @defi-rate-limits/foundry account:import",
-    "account:generate": "yarn workspace @defi-rate-limits/foundry account:generate",
-    "account:reveal-pk": "yarn workspace @defi-rate-limits/foundry account:reveal-pk",
-    "chain": "yarn workspace @defi-rate-limits/foundry chain",
-    "compile": "yarn workspace @defi-rate-limits/foundry compile",
-    "deploy": "yarn workspace @defi-rate-limits/foundry deploy",
-    "fork": "yarn workspace @defi-rate-limits/foundry fork",
-    "format": "yarn workspace @defi-rate-limits/nextjs format && yarn workspace @defi-rate-limits/foundry format",
-    "generate": "yarn workspace @defi-rate-limits/foundry account:generate",
-    "lint": "yarn workspace @defi-rate-limits/nextjs lint && yarn workspace @defi-rate-limits/foundry lint",
-    "next:build": "yarn workspace @defi-rate-limits/nextjs build",
-    "next:check-types": "yarn workspace @defi-rate-limits/nextjs check-types",
+    "account": "pnpm --filter @defi-rate-limits/foundry run account",
+    "account:import": "pnpm --filter @defi-rate-limits/foundry run account:import",
+    "account:generate": "pnpm --filter @defi-rate-limits/foundry run account:generate",
+    "account:reveal-pk": "pnpm --filter @defi-rate-limits/foundry run account:reveal-pk",
+    "chain": "pnpm --filter @defi-rate-limits/foundry run chain",
+    "compile": "pnpm --filter @defi-rate-limits/foundry run compile",
+    "deploy": "pnpm --filter @defi-rate-limits/foundry run deploy",
+    "fork": "pnpm --filter @defi-rate-limits/foundry run fork",
+    "format": "pnpm --filter @defi-rate-limits/nextjs run format && pnpm --filter @defi-rate-limits/foundry run format",
+    "generate": "pnpm --filter @defi-rate-limits/foundry run account:generate",
+    "lint": "pnpm --filter @defi-rate-limits/nextjs run lint && pnpm --filter @defi-rate-limits/foundry run lint",
+    "next:build": "pnpm --filter @defi-rate-limits/nextjs run build",
+    "next:check-types": "pnpm --filter @defi-rate-limits/nextjs run check-types",
     "postinstall": "husky",
     "precommit": "lint-staged",
-    "start": "yarn workspace @defi-rate-limits/nextjs dev",
-    "test": "yarn workspace @defi-rate-limits/foundry test",
-    "verify": "yarn workspace @defi-rate-limits/foundry verify"
+    "start": "pnpm --filter @defi-rate-limits/nextjs run dev",
+    "test": "pnpm --filter @defi-rate-limits/foundry run test",
+    "verify": "pnpm --filter @defi-rate-limits/foundry run verify"
   },
-  "resolutions": {
-    "fast-xml-parser": "4.5.4",
-    "form-data": "4.0.6",
-    "protobufjs": "7.5.5",
-    "sha.js": "2.4.12"
+  "pnpm": {
+    "overrides": {
+      "@coinbase/cdp-sdk": "1.51.2",
+      "fast-xml-parser": "4.5.4",
+      "form-data": "4.0.6",
+      "protobufjs": "7.5.5",
+      "sha.js": "2.4.12"
+    }
   },
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "pnpm@9.15.9",
   "devDependencies": {
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10"

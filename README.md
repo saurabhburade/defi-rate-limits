@@ -33,15 +33,15 @@ This repository no longer uses Hardhat.
 Requirements:
 
 - Node `>= 20.18.3`
-- Yarn
+- pnpm 9
 - Foundry / Anvil
 
 Run these in separate terminals:
 
 ```bash
-yarn chain
-yarn deploy
-yarn start
+pnpm chain
+pnpm run deploy
+pnpm start
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).
@@ -49,12 +49,12 @@ Then open [http://localhost:3000](http://localhost:3000).
 Useful commands:
 
 ```bash
-yarn compile
-yarn test
-yarn lint
-yarn format
-yarn next:build
-yarn next:check-types
+pnpm compile
+pnpm test
+pnpm lint
+pnpm format
+pnpm next:build
+pnpm next:check-types
 ```
 
 ## Contracts
@@ -101,15 +101,15 @@ Contracts are synced into:
 Deploy to a configured network:
 
 ```bash
-yarn deploy --network sepolia
-yarn deploy --network baseSepolia
+pnpm run deploy --network sepolia
+pnpm run deploy --network baseSepolia
 ```
 
 Verify deployed contracts:
 
 ```bash
-yarn verify --network sepolia
-yarn verify --network baseSepolia
+pnpm verify --network sepolia
+pnpm verify --network baseSepolia
 ```
 
 `ETHERSCAN_V2_API_KEY` is required for verification.
@@ -134,10 +134,10 @@ NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=...
 Account helpers:
 
 ```bash
-yarn generate
-yarn account
-yarn account:import
-yarn account:reveal-pk
+pnpm generate
+pnpm account
+pnpm account:import
+pnpm account:reveal-pk
 ```
 
 ## Current Readiness
@@ -159,5 +159,5 @@ What still depends on runtime credentials or external execution:
 ## Notes
 
 - The block explorer and faucet are local Anvil features, not public-network features.
-- `yarn next:check-types` now runs `next typegen` first, so it works from a clean checkout.
-- If you change contracts, rerun `yarn deploy` to regenerate frontend deployment metadata.
+- `pnpm next:check-types` runs `next typegen` first, so it works from a clean checkout.
+- If you change contracts, rerun `pnpm run deploy` to regenerate frontend deployment metadata.
