@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonBaseClassName, primaryButtonToneClassName, secondaryButtonClassName } from "@/components/common/Button";
@@ -90,9 +90,10 @@ const HeaderMenuLinks = ({ onNavigate }: { onNavigate?: () => void }) => {
 
 export const Header = () => {
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
-  useOutsideClick(mobileMenuRef, () => {
+  const closeMobileMenu = useCallback(() => {
     mobileMenuRef.current?.removeAttribute("open");
-  });
+  }, []);
+  useOutsideClick(mobileMenuRef, closeMobileMenu);
 
   return (
     <header className="sticky top-0 z-20 border-b border-default bg-[color:var(--background)]/94 backdrop-blur-xl">
@@ -115,11 +116,7 @@ export const Header = () => {
             <MenuIcon className="h-5 w-5" />
           </summary>
           <div className="absolute right-0 top-14 flex min-w-64 flex-col gap-5 rounded-[28px] bg-[color:var(--surface)] p-5 shadow-[0_18px_60px_rgb(0_0_0/0.12)]">
-            <HeaderMenuLinks
-              onNavigate={() => {
-                mobileMenuRef.current?.removeAttribute("open");
-              }}
-            />
+            <HeaderMenuLinks onNavigate={closeMobileMenu} />
             <SwitchTheme />
             <ConnectedWalletButton />
           </div>

@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { useLocalBorrowExecution } from "@/hooks/rate-limit/useLocalBorrowExecution";
+import { useNowSeconds } from "@/hooks/useNowSeconds";
 import { formatAmount } from "@/libs/rate-limit/formatting";
 import {
   applyBucketedLocalBorrow,
@@ -20,7 +21,6 @@ export const BucketedLocalPanel = ({
   amount,
   amountPlaceholder,
   bucketedState,
-  currentNowSeconds,
   onAmountChange,
   onReset,
   onWindowPresetChange,
@@ -31,7 +31,6 @@ export const BucketedLocalPanel = ({
   amount: string;
   amountPlaceholder: string;
   bucketedState: BucketedLocalState;
-  currentNowSeconds: number;
   onAmountChange: (value: string) => void;
   onReset: () => void;
   onWindowPresetChange: (value: BucketedWindowPreset) => void;
@@ -39,6 +38,7 @@ export const BucketedLocalPanel = ({
   windowConfig: BucketedWindowConfig;
   windowPreset: BucketedWindowPreset;
 }) => {
+  const currentNowSeconds = useNowSeconds();
   const snapshot = useMemo(
     () => getBucketedLocalSnapshot(bucketedState, currentNowSeconds, windowConfig),
     [bucketedState, currentNowSeconds, windowConfig],

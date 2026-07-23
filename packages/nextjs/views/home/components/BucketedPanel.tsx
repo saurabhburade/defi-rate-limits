@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { getContract } from "@/configs/contracts";
+import { getConfiguredChain } from "@/configs/wagmi/config";
 import { useBorrowExecution } from "@/hooks/rate-limit/useBorrowExecution";
-import { useDeployedContract } from "@/hooks/useDeployedContract";
 import { formatAmount } from "@/libs/rate-limit/formatting";
 import { BucketBars } from "@/views/shared/rate-limit/BucketBars";
 import { BucketedRateLimiterSourceButton } from "@/views/shared/rate-limit/ContractSourceButton";
@@ -11,9 +12,10 @@ import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
 import { useReadContracts } from "wagmi";
 
+const bucketedContract = getContract("BucketedRateLimiter", getConfiguredChain().id);
+
 export const BucketedPanel = () => {
   const [amount, setAmount] = useState("250000");
-  const { data: bucketedContract } = useDeployedContract({ contractName: "BucketedRateLimiter" });
   const execution = useBorrowExecution({
     contractName: "BucketedRateLimiter",
     amount,
@@ -33,7 +35,6 @@ export const BucketedPanel = () => {
       : [],
     query: {
       enabled: Boolean(bucketedContract),
-      refetchInterval: 3000,
     },
   });
 

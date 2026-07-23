@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { useLocalBorrowExecution } from "@/hooks/rate-limit/useLocalBorrowExecution";
+import { useNowSeconds } from "@/hooks/useNowSeconds";
 import { formatAmount, formatDuration } from "@/libs/rate-limit/formatting";
 import {
   applyTokenBucketLocalBorrow,
@@ -18,7 +19,6 @@ import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
 export const TokenLocalPanel = ({
   amount,
   amountPlaceholder,
-  currentNowSeconds,
   onAmountChange,
   onReset,
   setTokenState,
@@ -26,12 +26,12 @@ export const TokenLocalPanel = ({
 }: {
   amount: string;
   amountPlaceholder: string;
-  currentNowSeconds: number;
   onAmountChange: (value: string) => void;
   onReset: () => void;
   setTokenState: (state: TokenBucketLocalState) => void;
   tokenState: TokenBucketLocalState;
 }) => {
+  const currentNowSeconds = useNowSeconds();
   const snapshot = useMemo(
     () => getTokenBucketLocalSnapshot(tokenState, currentNowSeconds),
     [currentNowSeconds, tokenState],

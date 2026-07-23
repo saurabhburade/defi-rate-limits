@@ -51,7 +51,6 @@ export const getRainbowKitTheme = ({ isDarkMode, mounted }: { isDarkMode: boolea
 export const wagmiConfig = createConfig({
   chains: targetNetworks,
   connectors,
-  pollingInterval: 3000,
   ssr: true,
   transports: {
     [sepolia.id]: http("https://ethereum-sepolia-rpc.publicnode.com"),

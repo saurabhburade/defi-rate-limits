@@ -2,10 +2,11 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { BORROW_GAS_LIMIT } from "@/configs/constants";
+import { getContract } from "@/configs/contracts";
 import { getBlockExplorerTxUrl, getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/config";
-import { useDeployedContract } from "@/hooks/useDeployedContract";
 import { getErrorMessage, getParsedErrorWithKnownAbis } from "@/libs/contracts/errors";
 import { safeParseAmount } from "@/libs/rate-limit/formatting";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 
 type BorrowableContractName = "BucketedRateLimiter" | "TokenBucketRateLimiter";
@@ -113,13 +114,14 @@ export const useBorrowExecution = ({
   idleDetail: string;
 }) => {
   const parsedAmount = useMemo(() => safeParseAmount(amount), [amount]);
-  const contractAmount = useMemo(() => parsedAmount, [parsedAmount]);
+  const contractAmount = parsedAmount;
   const amountKey = parsedAmount?.toString() ?? "";
+  const queryClient = useQueryClient();
   const { address, chain } = useAccount();
   const { data: walletClient } = useWalletClient();
   const targetNetwork = useMemo(() => getConfiguredChain(chain?.id), [chain?.id]);
   const publicClient = usePublicClient({ chainId: targetNetwork.id });
-  const { data: deployedContract } = useDeployedContract({ chainId: targetNetwork.id, contractName });
+  const deployedContract = getContract(contractName, targetNetwork.id);
   const clientReady = Boolean(address && walletClient && publicClient && deployedContract);
 
   const [phase, setPhase] = useState<ExecutionPhase>("idle");
@@ -267,6 +269,7 @@ export const useBorrowExecution = ({
       setPhase("confirmed");
       setLastSimulatedAmountKey(amountKey);
       pushLog("success", "Onchain confirmation received. Borrow transaction settled successfully.");
+      void queryClient.invalidateQueries({ queryKey: ["readContracts"] });
     } catch (error) {
       if (isUserRejectedError(error)) {
         console.info(`[${contractName}.writeContract] user rejected`, error);
