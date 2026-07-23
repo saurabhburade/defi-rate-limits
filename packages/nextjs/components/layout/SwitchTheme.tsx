@@ -1,17 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { secondaryButtonClassName } from "@/components/common/Button";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export const SwitchTheme = ({ className = "" }: { className?: string }) => {
   const { setTheme, theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   if (!mounted) return null;
 

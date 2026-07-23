@@ -24,7 +24,6 @@ export const BucketedLocalPanel = ({
   onAmountChange,
   onReset,
   onWindowPresetChange,
-  resetKey,
   setBucketedState,
   windowConfig,
   windowPreset,
@@ -36,7 +35,6 @@ export const BucketedLocalPanel = ({
   onAmountChange: (value: string) => void;
   onReset: () => void;
   onWindowPresetChange: (value: BucketedWindowPreset) => void;
-  resetKey: number;
   setBucketedState: (state: BucketedLocalState) => void;
   windowConfig: BucketedWindowConfig;
   windowPreset: BucketedWindowPreset;
@@ -64,8 +62,11 @@ export const BucketedLocalPanel = ({
     applyBorrow,
     idleDetail: "Run a local preview before applying the borrow to this page state.",
     previewBorrow,
-    resetKey,
   });
+  const handleAmountChange = (value: string) => {
+    execution.reset();
+    onAmountChange(value);
+  };
 
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
@@ -102,7 +103,7 @@ export const BucketedLocalPanel = ({
         busyLabel="Applying"
         canSubmit={execution.canSubmit}
         chainTag="local"
-        onAmountChange={onAmountChange}
+        onAmountChange={handleAmountChange}
         onReset={onReset}
         onSend={execution.apply}
         onSimulate={execution.simulate}

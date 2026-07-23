@@ -22,7 +22,6 @@ async function main() {
 
   await spawnCommand("forge", forgeArgs);
   await spawnCommand("node", ["scripts/syncDeployments.mjs", "--network", network.name, "--chain-id", String(network.chainId)]);
-  await spawnCommand("node", ["scripts/generateTsAbis.mjs"]);
 }
 
 main().catch(error => {

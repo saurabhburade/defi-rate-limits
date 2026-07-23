@@ -1,4 +1,4 @@
-import deployedContracts from "@/configs/contracts/deployments";
+import { contractAbis } from "@/configs/abis";
 import { BaseError as BaseViemError, ContractFunctionRevertedError, keccak256, toHex } from "viem";
 
 export const getErrorMessage = (error: unknown) => {
@@ -52,7 +52,7 @@ export const getParsedViemError = (error: unknown): string => {
   return "An unknown error occurred";
 };
 
-export const getParsedErrorWithKnownAbis = (error: unknown, chainId: number): string => {
+export const getParsedErrorWithKnownAbis = (error: unknown): string => {
   const originalParsedError = getParsedViemError(error);
 
   if (!/Encoded error signature.*not found on ABI/i.test(originalParsedError)) {
@@ -60,16 +60,15 @@ export const getParsedErrorWithKnownAbis = (error: unknown, chainId: number): st
   }
 
   const signature = originalParsedError.match(/0x[a-fA-F0-9]{8}/)?.[0] ?? "";
-  const chainContracts = deployedContracts[chainId as keyof typeof deployedContracts];
 
-  if (!signature || !chainContracts) {
+  if (!signature) {
     return originalParsedError;
   }
 
   const errorLookup: Record<string, { name: string; contract: string; signature: string }> = {};
 
-  for (const [contractName, contract] of Object.entries(chainContracts)) {
-    for (const item of contract.abi) {
+  for (const [contractName, abi] of Object.entries(contractAbis)) {
+    for (const item of abi) {
       if (item.type !== "error") continue;
 
       const inputTypes = (item.inputs || []).map((input: { type: string }) => input.type).join(",");

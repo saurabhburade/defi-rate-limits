@@ -22,7 +22,7 @@ export const TokenPanel = () => {
       "Run the same simulation first so the app can prove the reservoir has enough capacity before wallet approval.",
   });
 
-  const { data: tokenReads } = useReadContracts({
+  const { data: tokenReads, dataUpdatedAt: tokenReadsUpdatedAt } = useReadContracts({
     allowFailure: false,
     contracts: tokenContract
       ? [
@@ -47,11 +47,16 @@ export const TokenPanel = () => {
     availableCapacity,
     maxCapacity,
     refillRate,
+    sampledAtMs: tokenReadsUpdatedAt || undefined,
     secondsUntilFull,
   });
   const isBusy =
     execution.phase === "simulating" || execution.phase === "awaiting_wallet" || execution.phase === "confirming";
   const refillPerMinute = refillRate ? refillRate * 60n : undefined;
+  const handleAmountChange = (value: string) => {
+    execution.reset();
+    setAmount(value);
+  };
 
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
@@ -84,7 +89,7 @@ export const TokenPanel = () => {
         busy={isBusy}
         canSubmit={execution.canSubmit}
         chainTag={execution.chainTag}
-        onAmountChange={setAmount}
+        onAmountChange={handleAmountChange}
         onSend={execution.send}
         onSimulate={execution.simulate}
         simulateLabel="Validate"

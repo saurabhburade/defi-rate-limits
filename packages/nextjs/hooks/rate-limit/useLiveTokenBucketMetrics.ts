@@ -6,6 +6,7 @@ export const useLiveTokenBucketMetrics = ({
   availableCapacity,
   maxCapacity,
   refillRate,
+  sampledAtMs,
   secondsUntilFull,
   secondsUntilAvailable,
   animateAvailable = false,
@@ -13,18 +14,12 @@ export const useLiveTokenBucketMetrics = ({
   availableCapacity?: bigint;
   maxCapacity?: bigint;
   refillRate?: bigint;
+  sampledAtMs?: number;
   secondsUntilFull?: bigint;
   secondsUntilAvailable?: bigint;
   animateAvailable?: boolean;
 }) => {
-  const [sampledAtMs, setSampledAtMs] = useState<number | null>(null);
   const [nowMs, setNowMs] = useState(() => Date.now());
-
-  useEffect(() => {
-    const now = Date.now();
-    setNowMs(now);
-    setSampledAtMs(now);
-  }, [secondsUntilFull?.toString(), secondsUntilAvailable?.toString()]);
 
   useEffect(() => {
     const interval = window.setInterval(() => setNowMs(Date.now()), 1000);
@@ -32,7 +27,7 @@ export const useLiveTokenBucketMetrics = ({
   }, []);
 
   return useMemo(() => {
-    if (sampledAtMs === null) {
+    if (sampledAtMs === undefined) {
       return {
         liveAvailableCapacity: availableCapacity,
         liveSecondsUntilFull: secondsUntilFull,

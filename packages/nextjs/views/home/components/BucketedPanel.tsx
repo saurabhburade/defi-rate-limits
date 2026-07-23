@@ -45,6 +45,10 @@ export const BucketedPanel = () => {
   const bucketValues = (recentBuckets?.[1] as bigint[] | undefined) ?? Array.from({ length: 6 }, () => 0n);
   const isBusy =
     execution.phase === "simulating" || execution.phase === "awaiting_wallet" || execution.phase === "confirming";
+  const handleAmountChange = (value: string) => {
+    execution.reset();
+    setAmount(value);
+  };
 
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
@@ -76,7 +80,7 @@ export const BucketedPanel = () => {
         busy={isBusy}
         canSubmit={execution.canSubmit}
         chainTag={execution.chainTag}
-        onAmountChange={setAmount}
+        onAmountChange={handleAmountChange}
         onSend={execution.send}
         onSimulate={execution.simulate}
         simulateLabel="Validate"

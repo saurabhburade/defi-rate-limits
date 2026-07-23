@@ -21,7 +21,6 @@ export const TokenLocalPanel = ({
   currentNowSeconds,
   onAmountChange,
   onReset,
-  resetKey,
   setTokenState,
   tokenState,
 }: {
@@ -30,7 +29,6 @@ export const TokenLocalPanel = ({
   currentNowSeconds: number;
   onAmountChange: (value: string) => void;
   onReset: () => void;
-  resetKey: number;
   setTokenState: (state: TokenBucketLocalState) => void;
   tokenState: TokenBucketLocalState;
 }) => {
@@ -57,9 +55,12 @@ export const TokenLocalPanel = ({
     applyBorrow,
     idleDetail: "Run a local preview before applying the borrow to this page state.",
     previewBorrow,
-    resetKey,
   });
   const refillPerMinute = snapshot.refillRate * 60n;
+  const handleAmountChange = (value: string) => {
+    execution.reset();
+    onAmountChange(value);
+  };
 
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
@@ -94,7 +95,7 @@ export const TokenLocalPanel = ({
         busyLabel="Applying"
         canSubmit={execution.canSubmit}
         chainTag="local"
-        onAmountChange={onAmountChange}
+        onAmountChange={handleAmountChange}
         onReset={onReset}
         onSend={execution.apply}
         onSimulate={execution.simulate}

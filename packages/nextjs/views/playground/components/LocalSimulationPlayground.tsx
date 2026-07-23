@@ -90,6 +90,7 @@ export const LocalSimulationPlayground = () => {
       <div className="mt-10">
         {activeMechanism === "bucketed" ? (
           <BucketedLocalPanel
+            key={`bucketed-${resetKey}`}
             amount={bucketedAmount}
             amountPlaceholder={DEFAULT_BUCKETED_AMOUNT}
             bucketedState={bucketedState}
@@ -97,19 +98,18 @@ export const LocalSimulationPlayground = () => {
             onAmountChange={setBucketedAmount}
             onReset={resetPlayground}
             onWindowPresetChange={setBucketedLimitWindow}
-            resetKey={resetKey}
             setBucketedState={setBucketedState}
             windowConfig={bucketedWindowConfig}
             windowPreset={bucketedWindowPreset}
           />
         ) : (
           <TokenLocalPanel
+            key={`token-${resetKey}`}
             amount={tokenAmount}
             amountPlaceholder={DEFAULT_TOKEN_AMOUNT}
             currentNowSeconds={currentNowSeconds}
             onAmountChange={setTokenAmount}
             onReset={resetPlayground}
-            resetKey={resetKey}
             setTokenState={setTokenState}
             tokenState={tokenState}
           />

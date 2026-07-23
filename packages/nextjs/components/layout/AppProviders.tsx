@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { wagmiConfig } from "@/configs/wagmi/config";
-import { getRainbowKitTheme } from "@/configs/wagmi/themes";
+import { getRainbowKitTheme, wagmiConfig } from "@/configs/wagmi/config";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
@@ -21,11 +20,7 @@ const queryClient = new QueryClient({
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   return (
     <WagmiProvider config={wagmiConfig}>

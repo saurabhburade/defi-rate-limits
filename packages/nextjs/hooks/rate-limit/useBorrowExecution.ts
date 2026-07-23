@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { BORROW_GAS_LIMIT } from "@/configs/contracts/constants";
-import { getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/chains";
-import { getBlockExplorerTxUrl } from "@/configs/wagmi/explorers";
+import { useCallback, useMemo, useState } from "react";
+import { BORROW_GAS_LIMIT } from "@/configs/constants";
+import { getBlockExplorerTxUrl, getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/config";
 import { useDeployedContract } from "@/hooks/useDeployedContract";
 import { getErrorMessage, getParsedErrorWithKnownAbis } from "@/libs/contracts/errors";
 import { safeParseAmount } from "@/libs/rate-limit/formatting";
@@ -132,7 +131,7 @@ export const useBorrowExecution = ({
 
   const parseExecutionError = (error: unknown) => {
     try {
-      return getParsedErrorWithKnownAbis(error, targetNetwork.id);
+      return getParsedErrorWithKnownAbis(error);
     } catch {
       return getErrorMessage(error);
     }
@@ -142,13 +141,14 @@ export const useBorrowExecution = ({
     setLogs(current => [...current, { id: Date.now() + current.length, level, message }]);
   };
 
-  useEffect(() => {
+  const reset = useCallback(() => {
     setPhase("idle");
     setErrorMessage(null);
     setFailedStep(null);
+    setLastSimulatedAmountKey("");
     setTxHash(null);
     setLogs([]);
-  }, [amountKey, contractName]);
+  }, []);
 
   const validate = () => {
     if (parsedAmount === undefined || contractAmount === undefined) {
@@ -356,6 +356,7 @@ export const useBorrowExecution = ({
     steps,
     status,
     logs,
+    reset,
     chainTag: getChainDisplayName(targetNetwork),
     canSubmit: parsedAmount !== undefined && clientReady && phase !== "awaiting_wallet" && phase !== "confirming",
     hasFreshSimulation: lastSimulatedAmountKey === amountKey && (phase === "simulated" || phase === "confirmed"),
