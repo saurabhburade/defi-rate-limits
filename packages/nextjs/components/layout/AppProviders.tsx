@@ -1,7 +1,5 @@
 "use client";
 
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
 import { getRainbowKitTheme, wagmiConfig } from "@/configs/wagmi/config";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
@@ -25,13 +23,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={getRainbowKitTheme({ isDarkMode, mounted })}>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="relative flex flex-1 flex-col">{children}</main>
-            <Footer />
-          </div>
-        </RainbowKitProvider>
+        <RainbowKitProvider theme={getRainbowKitTheme({ isDarkMode, mounted })}>{children}</RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

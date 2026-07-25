@@ -1,5 +1,7 @@
 import { Inter } from "next/font/google";
 import { AppProviders } from "@/components/layout/AppProviders";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { getMetadata } from "@/libs/metadata";
 import "@/styles/globals.css";
@@ -20,7 +22,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html suppressHydrationWarning>
       <body className={`${inter.variable} ${inter.className}`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="defi-rate-limits-theme">
-          <AppProviders>{children}</AppProviders>
+          <AppProviders>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="relative flex flex-1 flex-col">{children}</main>
+              <Footer />
+            </div>
+          </AppProviders>
         </ThemeProvider>
       </body>
     </html>

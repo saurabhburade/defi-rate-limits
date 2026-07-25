@@ -1,5 +1,3 @@
-"use client";
-
 import { secondaryButtonClassName } from "@/components/common/Button";
 
 export const Footer = () => {
