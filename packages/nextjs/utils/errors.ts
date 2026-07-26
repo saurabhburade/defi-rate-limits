@@ -1,5 +1,5 @@
-import { contractAbis } from "@/configs/abis";
 import { BaseError as BaseViemError, ContractFunctionRevertedError, keccak256, toHex } from "viem";
+import { contractAbis } from "@/configs/abis";
 
 export const getErrorMessage = (error: unknown) => {
   if (error && typeof error === "object") {

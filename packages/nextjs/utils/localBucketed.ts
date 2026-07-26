@@ -1,5 +1,4 @@
-import { formatBucketDuration, formatUnits } from "@/libs/rate-limit/localSimulationTrace";
-import {
+import type {
   BucketedLocalState,
   BucketedWindowConfig,
   BucketedWindowPreset,
@@ -7,6 +6,7 @@ import {
   LocalBorrowPreview,
   LocalBorrowTraceLog,
 } from "@/types/rate-limit";
+import { formatBucketDuration, formatUnits } from "@/utils/localSimulationTrace";
 
 export const LOCAL_LIMIT = 1_000_000n;
 export const LOCAL_NUM_BUCKETS = 6n;
@@ -29,8 +29,6 @@ export const getBucketedLocalWindowConfig = (
     numBuckets: LOCAL_NUM_BUCKETS,
   };
 };
-
-export const LOCAL_BUCKET_SIZE_SECONDS = getBucketedLocalWindowConfig().bucketSize;
 
 export const createInitialBucketedLocalState = (
   config: BucketedWindowConfig = getBucketedLocalWindowConfig(),

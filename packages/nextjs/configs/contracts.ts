@@ -1,5 +1,5 @@
-import { type ContractName, contractAbis } from "@/configs/abis";
 import type { Address } from "viem";
+import { type ContractName, contractAbis } from "@/configs/abis";
 
 export type { ContractName } from "@/configs/abis";
 

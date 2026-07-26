@@ -1,20 +1,17 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { useLocalBorrowExecution } from "@/hooks/rate-limit/useLocalBorrowExecution";
+import { useLocalBorrowExecution } from "@/hooks/useLocalBorrowExecution";
 import { useNowSeconds } from "@/hooks/useNowSeconds";
-import { formatAmount } from "@/libs/rate-limit/formatting";
-import {
-  applyBucketedLocalBorrow,
-  getBucketedLocalSnapshot,
-  previewBucketedLocalBorrow,
-} from "@/libs/rate-limit/localBucketed";
-import { BucketedLocalState, BucketedWindowConfig, BucketedWindowPreset } from "@/types/rate-limit";
-import { BucketedWindowSelect } from "@/views/playground/components/BucketedWindowSelect";
+import type { BucketedLocalState, BucketedWindowConfig, BucketedWindowPreset } from "@/types/rate-limit";
+import { formatAmount } from "@/utils/formatting";
+import { applyBucketedLocalBorrow, getBucketedLocalSnapshot, previewBucketedLocalBorrow } from "@/utils/localBucketed";
+import { BucketedWindowSelect } from "@/views/playground/BucketedWindowSelect";
 import { BucketBars } from "@/views/shared/rate-limit/BucketBars";
 import { BucketedRateLimiterSourceButton } from "@/views/shared/rate-limit/ContractSourceButton";
 import { ExecutionTimeline } from "@/views/shared/rate-limit/ExecutionTimeline";
 import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
+import { RateLimitPanelHeader } from "@/views/shared/rate-limit/RateLimitPanelHeader";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
 
 export const BucketedLocalPanel = ({
@@ -71,13 +68,9 @@ export const BucketedLocalPanel = ({
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-4">
-          <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">Strict rolling window</h2>
-          <div className="inline-flex items-center gap-2">
-            <span className="font-mono text-sm text-muted-foreground/50">BucketedRateLimiter.sol</span>
-            <BucketedRateLimiterSourceButton />
-          </div>
-        </div>
+        <RateLimitPanelHeader fileName="BucketedRateLimiter.sol" title="Strict rolling window">
+          <BucketedRateLimiterSourceButton />
+        </RateLimitPanelHeader>
         <div className="mt-8">
           <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_12rem] xl:items-end">
             <MetricStrip
@@ -107,7 +100,7 @@ export const BucketedLocalPanel = ({
         onReset={onReset}
         onSend={execution.apply}
         onSimulate={execution.simulate}
-        sendLabel="Apply borrow"
+        sendLabel="Borrow"
         simulateBusyLabel="Checking"
         simulateLabel="Validate"
         timeline={

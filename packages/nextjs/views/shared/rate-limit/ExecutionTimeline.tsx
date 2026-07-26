@@ -1,9 +1,9 @@
 "use client";
 
+import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import { useId, useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import type { ExecutionLog, StepStatus } from "@/types/rate-limit";
-import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 
 const stepStatusClassName: Record<StepStatus, string> = {
   pending: "border-default bg-[color:var(--surface)] text-muted-foreground",

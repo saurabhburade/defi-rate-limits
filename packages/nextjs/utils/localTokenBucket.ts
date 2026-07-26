@@ -1,10 +1,10 @@
-import { MAX_UINT256, ceilDiv, formatSeconds, formatUnits } from "@/libs/rate-limit/localSimulationTrace";
-import {
+import type {
   LocalBorrowApplyResult,
   LocalBorrowPreview,
   LocalBorrowTraceLog,
   TokenBucketLocalState,
 } from "@/types/rate-limit";
+import { ceilDiv, formatSeconds, formatUnits, MAX_UINT256 } from "@/utils/localSimulationTrace";
 
 export const LOCAL_MAX_CAPACITY = 1_000_000n;
 export const LOCAL_REFILL_RATE = LOCAL_MAX_CAPACITY / 3600n;

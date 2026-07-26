@@ -1,18 +1,19 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { useLocalBorrowExecution } from "@/hooks/rate-limit/useLocalBorrowExecution";
+import { useLocalBorrowExecution } from "@/hooks/useLocalBorrowExecution";
 import { useNowSeconds } from "@/hooks/useNowSeconds";
-import { formatAmount, formatDuration } from "@/libs/rate-limit/formatting";
+import type { TokenBucketLocalState } from "@/types/rate-limit";
+import { formatAmount, formatDuration } from "@/utils/formatting";
 import {
   applyTokenBucketLocalBorrow,
   getTokenBucketLocalSnapshot,
   previewTokenBucketLocalBorrow,
-} from "@/libs/rate-limit/localTokenBucket";
-import { TokenBucketLocalState } from "@/types/rate-limit";
+} from "@/utils/localTokenBucket";
 import { TokenBucketRateLimiterSourceButton } from "@/views/shared/rate-limit/ContractSourceButton";
 import { ExecutionTimeline } from "@/views/shared/rate-limit/ExecutionTimeline";
 import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
+import { RateLimitPanelHeader } from "@/views/shared/rate-limit/RateLimitPanelHeader";
 import { ReservoirMeter } from "@/views/shared/rate-limit/ReservoirMeter";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
 
@@ -65,13 +66,9 @@ export const TokenLocalPanel = ({
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-4">
-          <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">Burst and recover</h2>
-          <div className="inline-flex items-center gap-2">
-            <span className="font-mono text-sm text-muted-foreground/50">TokenBucketRateLimiter.sol</span>
-            <TokenBucketRateLimiterSourceButton />
-          </div>
-        </div>
+        <RateLimitPanelHeader fileName="TokenBucketRateLimiter.sol" title="Burst and recover">
+          <TokenBucketRateLimiterSourceButton />
+        </RateLimitPanelHeader>
 
         <div className="mt-8">
           <MetricStrip
@@ -99,7 +96,7 @@ export const TokenLocalPanel = ({
         onReset={onReset}
         onSend={execution.apply}
         onSimulate={execution.simulate}
-        sendLabel="Apply borrow"
+        sendLabel="Borrow"
         simulateBusyLabel="Checking"
         simulateLabel="Validate"
         timeline={

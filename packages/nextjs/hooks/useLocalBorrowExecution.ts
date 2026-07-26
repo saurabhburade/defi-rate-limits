@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { nowSeconds } from "@/hooks/useNowSeconds";
-import { safeParseAmount } from "@/libs/rate-limit/formatting";
-import {
+import type {
   ExecutionLog,
   ExecutionStep,
   LocalBorrowApplyResult,
@@ -13,6 +12,7 @@ import {
   LocalStatus,
   LocalStepKey,
 } from "@/types/rate-limit";
+import { safeParseAmount } from "@/utils/formatting";
 
 const SIMULATE_DELAY_MS = 650;
 const APPLY_DELAY_MS = 1800;
@@ -90,7 +90,9 @@ export const useLocalBorrowExecution = ({
 
   const appendTraceLogs = useCallback(
     (trace: LocalBorrowTraceLog[] | undefined) => {
-      trace?.forEach(log => appendLog(log.level, log.message));
+      trace?.forEach(log => {
+        appendLog(log.level, log.message);
+      });
     },
     [appendLog],
   );
@@ -120,10 +122,10 @@ export const useLocalBorrowExecution = ({
     setLogs([]);
   }, []);
 
-  const startOperation = () => {
+  const startOperation = useCallback(() => {
     operationIdRef.current += 1;
     return operationIdRef.current;
-  };
+  }, []);
 
   const validateAmount = useCallback(() => {
     if (parsedAmount === undefined) {
@@ -168,7 +170,7 @@ export const useLocalBorrowExecution = ({
       `Simulation passed with ${preview.remainingAfter.toLocaleString("en-US")} units remaining after the borrow.`,
     );
     return preview;
-  }, [appendLog, appendTraceLogs, fail, previewBorrow, validateAmount]);
+  }, [appendLog, appendTraceLogs, fail, previewBorrow, startOperation, validateAmount]);
 
   const apply = useCallback(async () => {
     const operationId = startOperation();
@@ -208,9 +210,9 @@ export const useLocalBorrowExecution = ({
       `Local borrow applied with ${result.remainingAfter.toLocaleString("en-US")} units remaining after commit.`,
     );
     return result;
-  }, [appendLog, appendTraceLogs, applyBorrow, fail, validateAmount]);
+  }, [appendLog, appendTraceLogs, applyBorrow, fail, startOperation, validateAmount]);
 
-  const steps: ExecutionStep[] = [
+  const steps: ExecutionStep<LocalStepKey>[] = [
     {
       key: "input",
       label: "Validate input",

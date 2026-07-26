@@ -1,8 +1,8 @@
-import { APP_NAME } from "@/configs/constants";
 import { darkTheme, getDefaultWallets, lightTheme } from "@rainbow-me/rainbowkit";
 import { type Chain, http } from "viem";
 import { sepolia } from "viem/chains";
 import { createConfig } from "wagmi";
+import { APP_NAME } from "@/configs/constants";
 
 const targetNetworks = [sepolia] as const satisfies readonly [Chain, ...Chain[]];
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "YOUR_WALLET_CONNECT_PROJECT_ID";
@@ -19,8 +19,6 @@ const connectors =
         appName: APP_NAME,
         projectId: walletConnectProjectId,
       }).connectors;
-
-export type TargetChainId = (typeof targetNetworks)[number]["id"];
 
 export const getConfiguredChain = (chainId?: number) =>
   targetNetworks.find(network => network.id === chainId) ?? targetNetworks[0];

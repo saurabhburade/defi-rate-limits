@@ -1,17 +1,20 @@
 "use client";
 
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { memo, useState } from "react";
+import { useReadContracts } from "wagmi";
+import { DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT } from "@/configs/constants";
 import { getContract } from "@/configs/contracts";
 import { getConfiguredChain } from "@/configs/wagmi/config";
-import { useBorrowExecution } from "@/hooks/rate-limit/useBorrowExecution";
-import { useLiveTokenBucketMetrics } from "@/hooks/rate-limit/useLiveTokenBucketMetrics";
-import { formatAmount, formatDuration } from "@/libs/rate-limit/formatting";
+import { useBorrowExecution } from "@/hooks/useBorrowExecution";
+import { useLiveTokenBucketMetrics } from "@/hooks/useLiveTokenBucketMetrics";
+import { formatAmount, formatDuration } from "@/utils/formatting";
 import { TokenBucketRateLimiterSourceButton } from "@/views/shared/rate-limit/ContractSourceButton";
 import { ExecutionTimeline } from "@/views/shared/rate-limit/ExecutionTimeline";
 import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
+import { RateLimitPanelHeader } from "@/views/shared/rate-limit/RateLimitPanelHeader";
 import { ReservoirMeter } from "@/views/shared/rate-limit/ReservoirMeter";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
-import { useReadContracts } from "wagmi";
 
 const tokenContract = getContract("TokenBucketRateLimiter", getConfiguredChain().id);
 
@@ -57,7 +60,8 @@ const TokenMetrics = memo(function TokenMetrics({
 });
 
 export const TokenPanel = () => {
-  const [amount, setAmount] = useState("200000");
+  const [amount, setAmount] = useState(DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT);
+  const { openConnectModal } = useConnectModal();
   const execution = useBorrowExecution({
     contractName: "TokenBucketRateLimiter",
     amount,
@@ -94,13 +98,9 @@ export const TokenPanel = () => {
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-4">
-          <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">Burst and recover</h2>
-          <div className="inline-flex items-center gap-2">
-            <span className="font-mono text-sm text-muted-foreground/50">TokenBucketRateLimiter.sol</span>
-            <TokenBucketRateLimiterSourceButton />
-          </div>
-        </div>
+        <RateLimitPanelHeader fileName="TokenBucketRateLimiter.sol" title="Burst and recover">
+          <TokenBucketRateLimiterSourceButton />
+        </RateLimitPanelHeader>
 
         <TokenMetrics
           availableCapacity={availableCapacity}
@@ -113,14 +113,16 @@ export const TokenPanel = () => {
 
       <WorkflowPanel
         amount={amount}
-        amountPlaceholder="200000"
+        amountPlaceholder={DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT}
         busy={isBusy}
         canSubmit={execution.canSubmit}
         chainTag={execution.chainTag}
         onAmountChange={handleAmountChange}
+        onConnectWallet={openConnectModal}
         onSend={execution.send}
         onSimulate={execution.simulate}
         simulateLabel="Validate"
+        walletConnected={execution.isWalletConnected}
         timeline={
           <ExecutionTimeline
             detail={execution.status.detail}

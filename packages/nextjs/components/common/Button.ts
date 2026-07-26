@@ -1,7 +1,11 @@
-export const buttonBaseClassName =
-  "inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-sm font-medium outline-none transition-all focus-visible:border-[color:var(--ring)] focus-visible:ring-[3px] focus-visible:ring-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50";
+const buttonInteractionClassName =
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full font-medium outline-none transition-all focus-visible:border-[color:var(--ring)] focus-visible:ring-[3px] focus-visible:ring-[color:var(--ring)] disabled:pointer-events-none disabled:opacity-50";
+
+export const buttonBaseClassName = `${buttonInteractionClassName} h-9 gap-2 px-4 text-sm`;
 
 export const secondaryButtonClassName = `${buttonBaseClassName} border border-default bg-[color:var(--surface)] text-foreground hover:bg-[color:var(--surface-muted)]`;
+
+export const secondaryIconButtonClassName = `${buttonInteractionClassName} size-8 border border-default bg-[color:var(--surface)] p-2 text-muted-foreground hover:bg-[color:var(--surface-muted)] hover:text-foreground`;
 
 export const primaryButtonClassName = `${buttonBaseClassName} border`;
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { inputClassName } from "@/components/common/Input";
-import { LOCAL_BUCKETED_WINDOW_OPTIONS } from "@/libs/rate-limit/localBucketed";
-import { BucketedWindowPreset } from "@/types/rate-limit";
+import type { BucketedWindowPreset } from "@/types/rate-limit";
+import { LOCAL_BUCKETED_WINDOW_OPTIONS } from "@/utils/localBucketed";
 
 export const BucketedWindowSelect = ({
   disabled,

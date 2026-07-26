@@ -1,52 +1,27 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { buttonBaseClassName } from "@/components/common/Button";
+import { DEFAULT_BUCKETED_BORROW_AMOUNT, DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT } from "@/configs/constants";
+import type { BucketedWindowPreset } from "@/types/rate-limit";
 import {
-  DEFAULT_BUCKETED_WINDOW_PRESET,
   createInitialBucketedLocalState,
+  DEFAULT_BUCKETED_WINDOW_PRESET,
   getBucketedLocalWindowConfig,
-} from "@/libs/rate-limit/localBucketed";
-import { createInitialTokenBucketLocalState } from "@/libs/rate-limit/localTokenBucket";
-import { BucketedWindowPreset } from "@/types/rate-limit";
-import { BucketedLocalPanel } from "@/views/playground/components/BucketedLocalPanel";
-import { TokenLocalPanel } from "@/views/playground/components/TokenLocalPanel";
-
-const DEFAULT_BUCKETED_AMOUNT = "250000";
-const DEFAULT_TOKEN_AMOUNT = "200000";
-
-type Mechanism = "bucketed" | "token";
-
-const MechanismButton = ({
-  active,
-  children,
-  onClick,
-}: {
-  active: boolean;
-  children: React.ReactNode;
-  onClick: () => void;
-}) => (
-  <button
-    className={`${buttonBaseClassName} px-4 ${
-      active
-        ? "bg-[color:var(--surface)] text-foreground shadow-[0_2px_12px_rgb(0_0_0/0.08)]"
-        : "text-muted-foreground hover:text-foreground"
-    }`}
-    onClick={onClick}
-    type="button"
-  >
-    {children}
-  </button>
-);
+} from "@/utils/localBucketed";
+import { createInitialTokenBucketLocalState } from "@/utils/localTokenBucket";
+import { BucketedLocalPanel } from "@/views/playground/BucketedLocalPanel";
+import { TokenLocalPanel } from "@/views/playground/TokenLocalPanel";
+import type { RateLimitMechanism } from "@/views/shared/rate-limit/MechanismTabs";
+import { MechanismTabs } from "@/views/shared/rate-limit/MechanismTabs";
 
 export const LocalSimulationPlayground = () => {
-  const [activeMechanism, setActiveMechanism] = useState<Mechanism>("bucketed");
+  const [activeMechanism, setActiveMechanism] = useState<RateLimitMechanism>("bucketed");
   const [bucketedWindowPreset, setBucketedWindowPreset] =
     useState<BucketedWindowPreset>(DEFAULT_BUCKETED_WINDOW_PRESET);
   const [bucketedState, setBucketedState] = useState(createInitialBucketedLocalState);
   const [tokenState, setTokenState] = useState(createInitialTokenBucketLocalState);
-  const [bucketedAmount, setBucketedAmount] = useState(DEFAULT_BUCKETED_AMOUNT);
-  const [tokenAmount, setTokenAmount] = useState(DEFAULT_TOKEN_AMOUNT);
+  const [bucketedAmount, setBucketedAmount] = useState(DEFAULT_BUCKETED_BORROW_AMOUNT);
+  const [tokenAmount, setTokenAmount] = useState(DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT);
   const [resetKey, setResetKey] = useState(0);
   const bucketedWindowConfig = useMemo(
     () => getBucketedLocalWindowConfig(bucketedWindowPreset),
@@ -63,8 +38,8 @@ export const LocalSimulationPlayground = () => {
   const resetPlayground = () => {
     setBucketedState(createInitialBucketedLocalState(bucketedWindowConfig));
     setTokenState(createInitialTokenBucketLocalState());
-    setBucketedAmount(DEFAULT_BUCKETED_AMOUNT);
-    setTokenAmount(DEFAULT_TOKEN_AMOUNT);
+    setBucketedAmount(DEFAULT_BUCKETED_BORROW_AMOUNT);
+    setTokenAmount(DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT);
     setResetKey(current => current + 1);
   };
 
@@ -72,25 +47,18 @@ export const LocalSimulationPlayground = () => {
     <div className="mx-auto w-full max-w-7xl px-6 pb-14 pt-8 sm:px-8 lg:px-10">
       <section>
         <p className="max-w-lg text-sm leading-6 text-muted-foreground">
-          Compare rolling-window and token-bucket limits with the same simulation-first path.
+          Compare rolling-window and token-bucket limits.
         </p>
       </section>
 
-      <section className="mt-8 inline-grid w-full max-w-[320px] grid-cols-2 rounded-full bg-[color:var(--surface-muted)] p-1">
-        <MechanismButton active={activeMechanism === "bucketed"} onClick={() => setActiveMechanism("bucketed")}>
-          Bucketed window
-        </MechanismButton>
-        <MechanismButton active={activeMechanism === "token"} onClick={() => setActiveMechanism("token")}>
-          Token bucket
-        </MechanismButton>
-      </section>
+      <MechanismTabs onChange={setActiveMechanism} value={activeMechanism} />
 
       <div className="mt-10">
         {activeMechanism === "bucketed" ? (
           <BucketedLocalPanel
             key={`bucketed-${resetKey}`}
             amount={bucketedAmount}
-            amountPlaceholder={DEFAULT_BUCKETED_AMOUNT}
+            amountPlaceholder={DEFAULT_BUCKETED_BORROW_AMOUNT}
             bucketedState={bucketedState}
             onAmountChange={setBucketedAmount}
             onReset={resetPlayground}
@@ -103,7 +71,7 @@ export const LocalSimulationPlayground = () => {
           <TokenLocalPanel
             key={`token-${resetKey}`}
             amount={tokenAmount}
-            amountPlaceholder={DEFAULT_TOKEN_AMOUNT}
+            amountPlaceholder={DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT}
             onAmountChange={setTokenAmount}
             onReset={resetPlayground}
             setTokenState={setTokenState}

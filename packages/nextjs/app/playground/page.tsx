@@ -1,6 +1,6 @@
-import { getMetadata } from "@/libs/metadata";
-import { PlaygroundView } from "@/views/playground/PlaygroundView";
 import type { NextPage } from "next";
+import { getMetadata } from "@/configs/metadata";
+import { LocalSimulationPlayground } from "@/views/playground/LocalSimulationPlayground";
 
 export const metadata = getMetadata({
   title: "Local Rate Limit Playground",
@@ -8,7 +8,7 @@ export const metadata = getMetadata({
 });
 
 const Playground: NextPage = () => {
-  return <PlaygroundView />;
+  return <LocalSimulationPlayground />;
 };
 
 export default Playground;
