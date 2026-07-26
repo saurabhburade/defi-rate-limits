@@ -1,21 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { DEFAULT_BUCKETED_BORROW_AMOUNT } from "@/configs/constants";
 import { getContract } from "@/configs/contracts";
 import { getConfiguredChain } from "@/configs/wagmi/config";
-import { useBorrowExecution } from "@/hooks/rate-limit/useBorrowExecution";
-import { formatAmount } from "@/libs/rate-limit/formatting";
+import { useBorrowExecution } from "@/hooks/useBorrowExecution";
+import { formatAmount } from "@/utils/formatting";
 import { BucketBars } from "@/views/shared/rate-limit/BucketBars";
 import { BucketedRateLimiterSourceButton } from "@/views/shared/rate-limit/ContractSourceButton";
 import { ExecutionTimeline } from "@/views/shared/rate-limit/ExecutionTimeline";
 import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
+import { RateLimitPanelHeader } from "@/views/shared/rate-limit/RateLimitPanelHeader";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useReadContracts } from "wagmi";
 
 const bucketedContract = getContract("BucketedRateLimiter", getConfiguredChain().id);
 
 export const BucketedPanel = () => {
-  const [amount, setAmount] = useState("250000");
+  const [amount, setAmount] = useState(DEFAULT_BUCKETED_BORROW_AMOUNT);
+  const { openConnectModal } = useConnectModal();
   const execution = useBorrowExecution({
     contractName: "BucketedRateLimiter",
     amount,
@@ -54,13 +58,9 @@ export const BucketedPanel = () => {
   return (
     <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start">
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-4">
-          <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">Strict rolling window</h2>
-          <div className="inline-flex items-center gap-2">
-            <span className="font-mono text-sm text-muted-foreground/50">BucketedRateLimiter.sol</span>
-            <BucketedRateLimiterSourceButton />
-          </div>
-        </div>
+        <RateLimitPanelHeader fileName="BucketedRateLimiter.sol" title="Strict rolling window">
+          <BucketedRateLimiterSourceButton />
+        </RateLimitPanelHeader>
 
         <div className="mt-8">
           <MetricStrip
@@ -77,14 +77,16 @@ export const BucketedPanel = () => {
 
       <WorkflowPanel
         amount={amount}
-        amountPlaceholder="250000"
+        amountPlaceholder={DEFAULT_BUCKETED_BORROW_AMOUNT}
         busy={isBusy}
         canSubmit={execution.canSubmit}
         chainTag={execution.chainTag}
         onAmountChange={handleAmountChange}
+        onConnectWallet={openConnectModal}
         onSend={execution.send}
         onSimulate={execution.simulate}
         simulateLabel="Validate"
+        walletConnected={execution.isWalletConnected}
         timeline={
           <ExecutionTimeline
             detail={execution.status.detail}

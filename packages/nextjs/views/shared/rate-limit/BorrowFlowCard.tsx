@@ -19,10 +19,12 @@ export const BorrowFlowCard = ({
   busyButton = "send",
   busyLabel = "Working",
   preview,
-  sendLabel = "Send",
+  sendLabel = "Borrow",
   simulateBusyLabel = "Simulating",
   simulateLabel = "Simulate",
   timeline,
+  walletConnected,
+  onConnectWallet,
 }: {
   amount: string;
   onAmountChange: (value: string) => void;
@@ -38,6 +40,8 @@ export const BorrowFlowCard = ({
   simulateBusyLabel?: string;
   simulateLabel?: string;
   timeline: React.ReactNode;
+  walletConnected?: boolean;
+  onConnectWallet?: () => void;
 }) => (
   <div className="min-w-0 space-y-4">
     <label className="block min-w-0">
@@ -52,40 +56,53 @@ export const BorrowFlowCard = ({
     </label>
 
     <div className="grid gap-3 sm:grid-cols-2">
-      <button
-        className={`${secondaryButtonClassName} w-full`}
-        disabled={busy || !canSubmit}
-        onClick={() => {
-          void onSimulate().catch(() => undefined);
-        }}
-        type="button"
-      >
-        {busy && busyButton === "simulate" ? (
-          <>
-            <Spinner className="size-3.5" />
-            {simulateBusyLabel}
-          </>
-        ) : (
-          simulateLabel
-        )}
-      </button>
-      <button
-        className={`${primaryButtonClassName} ${primaryButtonToneClassName} w-full`}
-        disabled={busy || !canSubmit}
-        onClick={() => {
-          void onSend().catch(() => undefined);
-        }}
-        type="button"
-      >
-        {busy && busyButton === "send" ? (
-          <>
-            <Spinner className="size-3.5" />
-            {busyLabel}
-          </>
-        ) : (
-          sendLabel
-        )}
-      </button>
+      {walletConnected === false ? (
+        <button
+          className={`${primaryButtonClassName} ${primaryButtonToneClassName} w-full sm:col-span-2`}
+          disabled={!onConnectWallet}
+          onClick={onConnectWallet}
+          type="button"
+        >
+          Connect wallet
+        </button>
+      ) : (
+        <>
+          <button
+            className={`${secondaryButtonClassName} w-full`}
+            disabled={busy || !canSubmit}
+            onClick={() => {
+              void onSimulate().catch(() => undefined);
+            }}
+            type="button"
+          >
+            {busy && busyButton === "simulate" ? (
+              <>
+                <Spinner className="size-3.5" />
+                {simulateBusyLabel}
+              </>
+            ) : (
+              simulateLabel
+            )}
+          </button>
+          <button
+            className={`${primaryButtonClassName} ${primaryButtonToneClassName} w-full`}
+            disabled={busy || !canSubmit}
+            onClick={() => {
+              void onSend().catch(() => undefined);
+            }}
+            type="button"
+          >
+            {busy && busyButton === "send" ? (
+              <>
+                <Spinner className="size-3.5" />
+                {busyLabel}
+              </>
+            ) : (
+              sendLabel
+            )}
+          </button>
+        </>
+      )}
     </div>
 
     {preview}

@@ -14,8 +14,8 @@ export type LocalBorrowTraceLog = {
 export type LocalStepKey = "input" | "simulate" | "apply";
 export type LocalPhase = "idle" | "simulating" | "simulated" | "applying" | "confirmed" | "failed";
 
-export type ExecutionStep = {
-  key: LocalStepKey;
+export type ExecutionStep<TStepKey extends string = string> = {
+  key: TStepKey;
   label: string;
   detail: string;
   status: StepStatus;

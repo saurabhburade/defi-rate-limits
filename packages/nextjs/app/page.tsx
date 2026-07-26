@@ -1,8 +1,8 @@
-import { HomeView } from "@/views/home/HomeView";
+import { RateLimitDemo } from "@/views/home/RateLimitDemo";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  return <HomeView />;
+  return <RateLimitDemo />;
 };
 
 export default Home;

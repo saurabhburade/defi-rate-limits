@@ -20,8 +20,6 @@ const connectors =
         projectId: walletConnectProjectId,
       }).connectors;
 
-export type TargetChainId = (typeof targetNetworks)[number]["id"];
-
 export const getConfiguredChain = (chainId?: number) =>
   targetNetworks.find(network => network.id === chainId) ?? targetNetworks[0];
 

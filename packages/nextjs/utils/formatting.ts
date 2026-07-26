@@ -19,7 +19,7 @@ export const formatAmount = (value?: bigint, compact = false) => {
   for (const threshold of thresholds) {
     if (absolute >= threshold.divisor) {
       const whole = absolute / threshold.divisor;
-      const fraction = Number((absolute % threshold.divisor) * 10n) / Number(threshold.divisor);
+      const fraction = Number(absolute % threshold.divisor) / Number(threshold.divisor);
       return `${sign}${numberFormatter.format(Number(whole) + fraction)}${threshold.suffix} units`;
     }
   }
@@ -59,5 +59,3 @@ export const safeParseAmount = (value: string) => {
     return undefined;
   }
 };
-
-export const shortAddress = (address?: string) => (address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "--");

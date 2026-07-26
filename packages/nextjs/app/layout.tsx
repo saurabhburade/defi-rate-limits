@@ -3,7 +3,7 @@ import { AppProviders } from "@/components/layout/AppProviders";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import { getMetadata } from "@/libs/metadata";
+import { getMetadata } from "@/configs/metadata";
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 

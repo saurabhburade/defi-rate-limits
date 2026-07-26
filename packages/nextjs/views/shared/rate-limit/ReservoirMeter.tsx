@@ -1,6 +1,6 @@
 "use client";
 
-import { formatPercent } from "@/libs/rate-limit/formatting";
+import { formatPercent } from "@/utils/formatting";
 
 export const ReservoirMeter = ({ value, total }: { value?: bigint; total?: bigint }) => {
   const percent = Math.min(formatPercent(value, total), 100);

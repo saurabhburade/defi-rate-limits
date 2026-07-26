@@ -12,6 +12,7 @@ export const WorkflowPanel = ({
   canSubmit,
   chainTag,
   onAmountChange,
+  onConnectWallet,
   onReset,
   onSimulate,
   onSend,
@@ -19,6 +20,7 @@ export const WorkflowPanel = ({
   simulateBusyLabel,
   simulateLabel,
   timeline,
+  walletConnected,
 }: {
   amount: string;
   amountPlaceholder: string;
@@ -28,6 +30,7 @@ export const WorkflowPanel = ({
   canSubmit: boolean;
   chainTag?: string;
   onAmountChange: (value: string) => void;
+  onConnectWallet?: () => void;
   onReset?: () => void;
   onSimulate: () => Promise<unknown>;
   onSend: () => Promise<unknown>;
@@ -35,6 +38,7 @@ export const WorkflowPanel = ({
   simulateBusyLabel?: string;
   simulateLabel?: string;
   timeline: React.ReactNode;
+  walletConnected?: boolean;
 }) => (
   <aside className="rounded-2xl bg-[color:var(--surface-muted)] px-5 py-5">
     <div className="flex min-h-8 flex-wrap items-center justify-between gap-3">
@@ -61,12 +65,14 @@ export const WorkflowPanel = ({
         busyLabel={busyLabel}
         canSubmit={canSubmit}
         onAmountChange={onAmountChange}
+        onConnectWallet={onConnectWallet}
         onSend={onSend}
         onSimulate={onSimulate}
         sendLabel={sendLabel}
         simulateBusyLabel={simulateBusyLabel}
         simulateLabel={simulateLabel}
         timeline={timeline}
+        walletConnected={walletConnected}
       />
     </div>
   </aside>

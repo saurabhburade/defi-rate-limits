@@ -1,5 +1,5 @@
-import { getMetadata } from "@/libs/metadata";
-import { PlaygroundView } from "@/views/playground/PlaygroundView";
+import { getMetadata } from "@/configs/metadata";
+import { LocalSimulationPlayground } from "@/views/playground/LocalSimulationPlayground";
 import type { NextPage } from "next";
 
 export const metadata = getMetadata({
@@ -8,7 +8,7 @@ export const metadata = getMetadata({
 });
 
 const Playground: NextPage = () => {
-  return <PlaygroundView />;
+  return <LocalSimulationPlayground />;
 };
 
 export default Playground;

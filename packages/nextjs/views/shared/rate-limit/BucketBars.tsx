@@ -1,6 +1,6 @@
 "use client";
 
-import { formatAmount, formatPercent } from "@/libs/rate-limit/formatting";
+import { formatAmount, formatPercent } from "@/utils/formatting";
 
 const clampPercent = (value: number) => Math.min(Math.max(value, 0), 100);
 

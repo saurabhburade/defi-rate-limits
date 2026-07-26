@@ -4,28 +4,15 @@ import { useCallback, useMemo, useState } from "react";
 import { BORROW_GAS_LIMIT } from "@/configs/constants";
 import { getContract } from "@/configs/contracts";
 import { getBlockExplorerTxUrl, getChainDisplayName, getConfiguredChain } from "@/configs/wagmi/config";
-import { getErrorMessage, getParsedErrorWithKnownAbis } from "@/libs/contracts/errors";
-import { safeParseAmount } from "@/libs/rate-limit/formatting";
+import type { ExecutionLog, ExecutionStep } from "@/types/rate-limit";
+import { getErrorMessage, getParsedErrorWithKnownAbis } from "@/utils/errors";
+import { safeParseAmount } from "@/utils/formatting";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 
 type BorrowableContractName = "BucketedRateLimiter" | "TokenBucketRateLimiter";
 type ExecutionPhase = "idle" | "simulating" | "simulated" | "awaiting_wallet" | "confirming" | "confirmed" | "failed";
 type StepKey = "input" | "simulate" | "wallet" | "confirm";
-type StepStatus = "pending" | "active" | "complete" | "error";
-
-type ExecutionStep = {
-  key: StepKey;
-  label: string;
-  detail: string;
-  status: StepStatus;
-};
-
-type ExecutionLog = {
-  id: number;
-  level: "info" | "success" | "error";
-  message: string;
-};
 
 type SendStatus = {
   phase: ExecutionPhase;
@@ -117,7 +104,7 @@ export const useBorrowExecution = ({
   const contractAmount = parsedAmount;
   const amountKey = parsedAmount?.toString() ?? "";
   const queryClient = useQueryClient();
-  const { address, chain } = useAccount();
+  const { address, chain, isConnected } = useAccount();
   const { data: walletClient } = useWalletClient();
   const targetNetwork = useMemo(() => getConfiguredChain(chain?.id), [chain?.id]);
   const publicClient = usePublicClient({ chainId: targetNetwork.id });
@@ -295,7 +282,7 @@ export const useBorrowExecution = ({
       ? { ...defaultStatus, detail: idleDetail }
       : statusByPhase(phase, errorMessage, txHash, explorerUrl);
 
-  const steps: ExecutionStep[] = [
+  const steps: ExecutionStep<StepKey>[] = [
     {
       key: "input",
       label: "Validate input",
@@ -363,5 +350,6 @@ export const useBorrowExecution = ({
     chainTag: getChainDisplayName(targetNetwork),
     canSubmit: parsedAmount !== undefined && clientReady && phase !== "awaiting_wallet" && phase !== "confirming",
     hasFreshSimulation: lastSimulatedAmountKey === amountKey && (phase === "simulated" || phase === "confirmed"),
+    isWalletConnected: isConnected,
   };
 };

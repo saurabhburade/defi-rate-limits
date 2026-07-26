@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { nowSeconds } from "@/hooks/useNowSeconds";
-import { safeParseAmount } from "@/libs/rate-limit/formatting";
-import {
+import type {
   ExecutionLog,
   ExecutionStep,
   LocalBorrowApplyResult,
@@ -13,6 +12,7 @@ import {
   LocalStatus,
   LocalStepKey,
 } from "@/types/rate-limit";
+import { safeParseAmount } from "@/utils/formatting";
 
 const SIMULATE_DELAY_MS = 650;
 const APPLY_DELAY_MS = 1800;
@@ -210,7 +210,7 @@ export const useLocalBorrowExecution = ({
     return result;
   }, [appendLog, appendTraceLogs, applyBorrow, fail, validateAmount]);
 
-  const steps: ExecutionStep[] = [
+  const steps: ExecutionStep<LocalStepKey>[] = [
     {
       key: "input",
       label: "Validate input",
