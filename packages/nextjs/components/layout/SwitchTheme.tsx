@@ -1,9 +1,9 @@
 "use client";
 
-import { secondaryIconButtonClassName } from "@/components/common/Button";
-import { useIsMounted } from "@/hooks/useIsMounted";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { secondaryIconButtonClassName } from "@/components/common/Button";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 export const SwitchTheme = ({ className = "" }: { className?: string }) => {
   const { setTheme, theme } = useTheme();

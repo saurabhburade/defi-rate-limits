@@ -1,6 +1,8 @@
 "use client";
 
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { memo, useState } from "react";
+import { useReadContracts } from "wagmi";
 import { DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT } from "@/configs/constants";
 import { getContract } from "@/configs/contracts";
 import { getConfiguredChain } from "@/configs/wagmi/config";
@@ -13,8 +15,6 @@ import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
 import { RateLimitPanelHeader } from "@/views/shared/rate-limit/RateLimitPanelHeader";
 import { ReservoirMeter } from "@/views/shared/rate-limit/ReservoirMeter";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useReadContracts } from "wagmi";
 
 const tokenContract = getContract("TokenBucketRateLimiter", getConfiguredChain().id);
 

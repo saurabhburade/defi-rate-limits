@@ -1,9 +1,9 @@
 "use client";
 
+import { CodeIcon } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { secondaryButtonClassName } from "@/components/common/Button";
 import { ContractSourceSheet } from "@/views/shared/rate-limit/ContractSourceSheet";
-import { CodeIcon } from "lucide-react";
 
 type SourceLoader = () => Promise<string>;
 

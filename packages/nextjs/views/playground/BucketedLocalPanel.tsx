@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from "react";
 import { useLocalBorrowExecution } from "@/hooks/useLocalBorrowExecution";
 import { useNowSeconds } from "@/hooks/useNowSeconds";
-import { BucketedLocalState, BucketedWindowConfig, BucketedWindowPreset } from "@/types/rate-limit";
+import type { BucketedLocalState, BucketedWindowConfig, BucketedWindowPreset } from "@/types/rate-limit";
 import { formatAmount } from "@/utils/formatting";
 import { applyBucketedLocalBorrow, getBucketedLocalSnapshot, previewBucketedLocalBorrow } from "@/utils/localBucketed";
 import { BucketedWindowSelect } from "@/views/playground/BucketedWindowSelect";

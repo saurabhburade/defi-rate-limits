@@ -1,6 +1,8 @@
 "use client";
 
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useState } from "react";
+import { useReadContracts } from "wagmi";
 import { DEFAULT_BUCKETED_BORROW_AMOUNT } from "@/configs/constants";
 import { getContract } from "@/configs/contracts";
 import { getConfiguredChain } from "@/configs/wagmi/config";
@@ -12,8 +14,6 @@ import { ExecutionTimeline } from "@/views/shared/rate-limit/ExecutionTimeline";
 import { MetricStrip } from "@/views/shared/rate-limit/MetricStrip";
 import { RateLimitPanelHeader } from "@/views/shared/rate-limit/RateLimitPanelHeader";
 import { WorkflowPanel } from "@/views/shared/rate-limit/WorkflowPanel";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useReadContracts } from "wagmi";
 
 const bucketedContract = getContract("BucketedRateLimiter", getConfiguredChain().id);
 

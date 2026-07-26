@@ -1,7 +1,7 @@
 "use client";
 
 import { inputClassName } from "@/components/common/Input";
-import { BucketedWindowPreset } from "@/types/rate-limit";
+import type { BucketedWindowPreset } from "@/types/rate-limit";
 import { LOCAL_BUCKETED_WINDOW_OPTIONS } from "@/utils/localBucketed";
 
 export const BucketedWindowSelect = ({

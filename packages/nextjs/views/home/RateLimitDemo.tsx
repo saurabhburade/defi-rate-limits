@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { BucketedPanel } from "@/views/home/BucketedPanel";
 import { TokenPanel } from "@/views/home/TokenPanel";
-import { MechanismTabs } from "@/views/shared/rate-limit/MechanismTabs";
 import type { RateLimitMechanism } from "@/views/shared/rate-limit/MechanismTabs";
+import { MechanismTabs } from "@/views/shared/rate-limit/MechanismTabs";
 
 export const RateLimitDemo = () => {
   const [activeMechanism, setActiveMechanism] = useState<RateLimitMechanism>("bucketed");

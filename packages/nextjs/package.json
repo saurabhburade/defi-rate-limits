@@ -6,8 +6,12 @@
     "build": "next build --webpack",
     "check-types": "next typegen && tsc --noEmit --incremental",
     "dev": "next dev --webpack",
-    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
-    "lint": "eslint",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
     "start": "next start",
     "test": "node --test utils/*.test.mjs"
   },
@@ -23,17 +27,12 @@
     "wagmi": "2.19.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.5",
     "@tailwindcss/postcss": "latest",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^20",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19",
-    "eslint": "^9.23.0",
-    "eslint-config-next": "16.2.11",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.4",
     "postcss": "^8.4.45",
-    "prettier": "^3.5.3",
     "tailwindcss": "^4.1.3",
     "typescript": "^5.8.2"
   }

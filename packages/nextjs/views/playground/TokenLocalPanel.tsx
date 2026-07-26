@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from "react";
 import { useLocalBorrowExecution } from "@/hooks/useLocalBorrowExecution";
 import { useNowSeconds } from "@/hooks/useNowSeconds";
-import { TokenBucketLocalState } from "@/types/rate-limit";
+import type { TokenBucketLocalState } from "@/types/rate-limit";
 import { formatAmount, formatDuration } from "@/utils/formatting";
 import {
   applyTokenBucketLocalBorrow,

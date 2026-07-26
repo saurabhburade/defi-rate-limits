@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useCallback, useRef } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { MenuIcon, SmileIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback, useRef } from "react";
 import { buttonBaseClassName, primaryButtonToneClassName, secondaryButtonClassName } from "@/components/common/Button";
 import { SwitchTheme } from "@/components/layout/SwitchTheme";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { MenuIcon, SmileIcon } from "lucide-react";
 
 type HeaderMenuLink = {
   label: string;

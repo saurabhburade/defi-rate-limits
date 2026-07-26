@@ -94,10 +94,7 @@ export const BucketBars = ({
           const amountLabel = formatAmount(amount, true);
 
           return (
-            <div
-              className="rounded-lg border border-default bg-[color:var(--surface-muted)] px-3 py-4"
-              key={`${label}-${index}`}
-            >
+            <div className="rounded-lg border border-default bg-[color:var(--surface-muted)] px-3 py-4" key={label}>
               <CircularProgress
                 label={percentLabel}
                 srLabel={`${label}: ${amountLabel}, ${percentLabel} of the rolling-window limit`}

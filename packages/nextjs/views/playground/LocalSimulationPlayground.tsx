@@ -4,15 +4,15 @@ import { useMemo, useState } from "react";
 import { DEFAULT_BUCKETED_BORROW_AMOUNT, DEFAULT_TOKEN_BUCKET_BORROW_AMOUNT } from "@/configs/constants";
 import type { BucketedWindowPreset } from "@/types/rate-limit";
 import {
-  DEFAULT_BUCKETED_WINDOW_PRESET,
   createInitialBucketedLocalState,
+  DEFAULT_BUCKETED_WINDOW_PRESET,
   getBucketedLocalWindowConfig,
 } from "@/utils/localBucketed";
 import { createInitialTokenBucketLocalState } from "@/utils/localTokenBucket";
 import { BucketedLocalPanel } from "@/views/playground/BucketedLocalPanel";
 import { TokenLocalPanel } from "@/views/playground/TokenLocalPanel";
-import { MechanismTabs } from "@/views/shared/rate-limit/MechanismTabs";
 import type { RateLimitMechanism } from "@/views/shared/rate-limit/MechanismTabs";
+import { MechanismTabs } from "@/views/shared/rate-limit/MechanismTabs";
 
 export const LocalSimulationPlayground = () => {
   const [activeMechanism, setActiveMechanism] = useState<RateLimitMechanism>("bucketed");
