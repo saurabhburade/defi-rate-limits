@@ -8,7 +8,8 @@
     "dev": "next dev --webpack",
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "lint": "eslint",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test utils/*.test.mjs"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "2.2.9",
