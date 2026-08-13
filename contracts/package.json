@@ -1,0 +1,16 @@
+{
+  "name": "@defi-rate-limits/contracts",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "chain": "anvil --host 0.0.0.0 --port 8545 --chain-id 31337",
+    "check-types": "echo 'No TypeScript checks for Foundry workspace'",
+    "clean": "forge clean && rm -rf broadcast cache out",
+    "compile": "forge build",
+    "flatten": "forge flatten",
+    "format": "forge fmt",
+    "lint": "forge fmt --check",
+    "lint-staged": "pnpm run format",
+    "test": "forge test --offline"
+  }
+}
