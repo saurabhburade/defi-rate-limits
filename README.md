@@ -15,18 +15,17 @@ The frontend includes:
 - Smart contracts: Foundry
 - Local chain: Anvil
 - Frontend: Next.js App Router + Wagmi + Viem + RainbowKit
-- Frontend contract configuration: manually maintained in `packages/nextjs/configs/abis.ts` and `contracts.ts`
+- Frontend contract configuration: manually maintained in `web/configs/abis.ts` and `web/configs/contracts.ts`
 
 This repository no longer uses Hardhat.
 
 ## Repo Layout
 
-- `packages/foundry/contracts/`: rate limiter contracts
-- `packages/foundry/script/`: Forge deployment scripts
-- `packages/foundry/scripts/`: deploy, verify, account, and deployment-manifest helpers
-- `packages/foundry/test/`: Forge tests
-- `packages/foundry/deployments/`: synced deployment manifests
-- `packages/nextjs/`: frontend app
+- `contracts/src/`: rate limiter contracts
+- `contracts/script/`: Forge deployment scripts
+- `contracts/test/`: Forge tests
+- `contracts/deployments/`: synced deployment manifests
+- `web/`: frontend app
 
 ## Local Development
 
@@ -40,7 +39,6 @@ Run these in separate terminals:
 
 ```bash
 pnpm chain
-pnpm run deploy
 pnpm start
 ```
 
@@ -53,8 +51,8 @@ pnpm compile
 pnpm test
 pnpm lint
 pnpm format
-pnpm next:build
-pnpm next:check-types
+pnpm web:build
+pnpm web:check-types
 ```
 
 ## Contracts
@@ -93,53 +91,29 @@ Deployment manifests currently exist for:
 - `sepolia`
 - `baseSepolia`
 
-Deployment manifests are synced into:
+Historical deployment manifests are stored in:
 
-- `packages/foundry/deployments/<network>/`
+- `contracts/deployments/<network>/`
 
 Frontend ABIs and addresses are maintained manually in:
 
-- `packages/nextjs/configs/abis.ts`
-- `packages/nextjs/configs/contracts.ts`
+- `web/configs/abis.ts`
+- `web/configs/contracts.ts`
 
-Deploy to a configured network:
-
-```bash
-pnpm run deploy --network sepolia
-pnpm run deploy --network baseSepolia
-```
-
-Verify deployed contracts:
-
-```bash
-pnpm verify --network sepolia
-pnpm verify --network baseSepolia
-```
-
-`ETHERSCAN_V2_API_KEY` is required for verification.
+The repository retains a native Forge deployment script at `contracts/script/Deploy.s.sol`. Run deployment and verification directly with the Foundry CLI when needed; automated account, deployment-manifest, and explorer-verification helpers are intentionally not included.
 
 ## Environment
 
-This repo reads env from the root `.env` and `packages/foundry/.env`.
+Foundry reads contract tooling variables from `contracts/.env`. Next.js variables belong in `web/.env.local`.
 
 Common variables:
 
 ```bash
 ALCHEMY_API_KEY=...
 BASE_SEPOLIA_RPC_URL=...
-DEPLOYER_PRIVATE_KEY=0x...
-# or DEPLOYER_PRIVATE_KEY_ENCRYPTED=...
+PRIVATE_KEY=0x...
 ETHERSCAN_V2_API_KEY=...
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=...
-```
-
-Account helpers:
-
-```bash
-pnpm generate
-pnpm account
-pnpm account:import
-pnpm account:reveal-pk
 ```
 
 ## Current Readiness
@@ -151,7 +125,7 @@ What is in place:
 - Synced frontend ABI/address wiring
 - Forge test coverage for both limiter models
 - NatSpec and audit-readiness documentation on contracts
-- Verification scripts for `sepolia`, `base`, and `baseSepolia`
+- A native Forge deployment script and historical deployment manifests
 
 What still depends on runtime credentials or external execution:
 
@@ -161,5 +135,5 @@ What still depends on runtime credentials or external execution:
 ## Notes
 
 - The block explorer and faucet are local Anvil features, not public-network features.
-- `pnpm next:check-types` runs `next typegen` first, so it works from a clean checkout.
-- If you change contracts, rerun `pnpm run deploy` to regenerate frontend deployment metadata.
+- `pnpm web:check-types` runs `next typegen` first, so it works from a clean checkout.
+- If you change contracts, update the manually maintained frontend ABIs and addresses.
