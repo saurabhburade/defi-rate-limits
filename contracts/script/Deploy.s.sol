@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {BucketedRateLimiter} from "../contracts/BucketedRateLimiter.sol";
-import {TokenBucketRateLimiter} from "../contracts/TokenBucketRateLimiter.sol";
+import {BucketedRateLimiter} from "../src/BucketedRateLimiter.sol";
+import {TokenBucketRateLimiter} from "../src/TokenBucketRateLimiter.sol";
 
 interface Vm {
     function startBroadcast() external;

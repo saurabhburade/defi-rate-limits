@@ -4,29 +4,21 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/foundry",
-      "packages/nextjs"
+      "contracts",
+      "web"
     ]
   },
   "scripts": {
-    "account": "pnpm --filter @defi-rate-limits/foundry run account",
-    "account:import": "pnpm --filter @defi-rate-limits/foundry run account:import",
-    "account:generate": "pnpm --filter @defi-rate-limits/foundry run account:generate",
-    "account:reveal-pk": "pnpm --filter @defi-rate-limits/foundry run account:reveal-pk",
-    "chain": "pnpm --filter @defi-rate-limits/foundry run chain",
-    "compile": "pnpm --filter @defi-rate-limits/foundry run compile",
-    "deploy": "pnpm --filter @defi-rate-limits/foundry run deploy",
-    "fork": "pnpm --filter @defi-rate-limits/foundry run fork",
-    "format": "pnpm --filter @defi-rate-limits/nextjs run format && pnpm --filter @defi-rate-limits/foundry run format",
-    "generate": "pnpm --filter @defi-rate-limits/foundry run account:generate",
-    "lint": "pnpm --filter @defi-rate-limits/nextjs run lint && pnpm --filter @defi-rate-limits/foundry run lint",
-    "next:build": "pnpm --filter @defi-rate-limits/nextjs run build",
-    "next:check-types": "pnpm --filter @defi-rate-limits/nextjs run check-types",
+    "chain": "pnpm --filter @defi-rate-limits/contracts run chain",
+    "compile": "pnpm --filter @defi-rate-limits/contracts run compile",
+    "format": "pnpm --filter @defi-rate-limits/web run format && pnpm --filter @defi-rate-limits/contracts run format",
+    "lint": "pnpm --filter @defi-rate-limits/web run lint && pnpm --filter @defi-rate-limits/contracts run lint",
+    "web:build": "pnpm --filter @defi-rate-limits/web run build",
+    "web:check-types": "pnpm --filter @defi-rate-limits/web run check-types",
     "postinstall": "husky",
     "precommit": "lint-staged",
-    "start": "pnpm --filter @defi-rate-limits/nextjs run dev",
-    "test": "pnpm --filter @defi-rate-limits/foundry run test",
-    "verify": "pnpm --filter @defi-rate-limits/foundry run verify"
+    "start": "pnpm --filter @defi-rate-limits/web run dev",
+    "test": "pnpm --filter @defi-rate-limits/contracts run test"
   },
   "pnpm": {
     "overrides": {

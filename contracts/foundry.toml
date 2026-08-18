@@ -1,5 +1,5 @@
 [profile.default]
-src = "contracts"
+src = "src"
 test = "test"
 script = "script"
 out = "out"
@@ -11,7 +11,6 @@ fs_permissions = [
   { access = "read", path = "./broadcast" },
   { access = "read", path = "./out" },
   { access = "read-write", path = "./deployments" },
-  { access = "read-write", path = "../nextjs/contracts" },
 ]
 
 [rpc_endpoints]

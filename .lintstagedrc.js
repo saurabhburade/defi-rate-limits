@@ -1,21 +1,19 @@
 const path = require("path");
 
-const buildNextBiomeCommand = (filenames) =>
-  `pnpm --filter @defi-rate-limits/nextjs exec biome check --write --no-errors-on-unmatched ${filenames
-    .map((f) =>
-      JSON.stringify(path.relative(path.join("packages", "nextjs"), f)),
-    )
+const buildWebBiomeCommand = (filenames) =>
+  `pnpm --filter @defi-rate-limits/web exec biome check --write --no-errors-on-unmatched ${filenames
+    .map((f) => JSON.stringify(path.relative("web", f)))
     .join(" ")}`;
 
-const checkTypesNextCommand = () =>
-  "pnpm --filter @defi-rate-limits/nextjs run check-types";
+const checkTypesWebCommand = () =>
+  "pnpm --filter @defi-rate-limits/web run check-types";
 
 module.exports = {
-  "packages/nextjs/**/*.{css,js,json,mjs,ts,tsx}": [
-    buildNextBiomeCommand,
-    checkTypesNextCommand,
+  "web/**/*.{css,js,json,mjs,ts,tsx}": [
+    buildWebBiomeCommand,
+    checkTypesWebCommand,
   ],
-  "packages/foundry/**/*.{sol,mjs,toml}": [
-    "pnpm --filter @defi-rate-limits/foundry run lint-staged",
+  "contracts/**/*.{sol,toml}": [
+    "pnpm --filter @defi-rate-limits/contracts run lint-staged",
   ],
 };
